@@ -74,6 +74,7 @@ button.ghost{color:var(--text)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips span{background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:.88rem}
 .quote{margin-top:12px;font-style:italic;opacity:.95;border-left:3px solid rgba(255,255,255,.6);padding-left:10px}
+textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);font:inherit;resize:vertical}.card table td:first-child{white-space:nowrap}
 </style></head>
 <body><main>
 <header class="hero">
@@ -83,7 +84,7 @@ button.ghost{color:var(--text)}
 <div class="chips"><span>🎯 Goal: 1100+</span><span>📅 Test day: Mar 6, 2027</span><span id="cd">⏳ …</span></div>
 <div class="quote" id="qt"></div>
 </header>
-<nav id="nav"><button data-t="track">✅ Tracker</button><button data-t="hard">🔥 Hard Concepts</button><button data-t="plan">📋 Study Plan</button><button data-t="res">🔗 Resources</button></nav>
+<nav id="nav"><button data-t="track">✅ Tracker</button><button data-t="hard">🔥 Hard Concepts</button><button data-t="plan">📋 Study Plan</button><button data-t="essay">✍️ College Essay</button><button data-t="res">🔗 Resources</button></nav>
 <section class="pane" id="p-track">
 <div class="top">
   <div><h2 style="font-size:1.3rem;margin:0">🎯 Daily Progress Tracker</h2><div class="muted" id="sub"></div></div>
@@ -271,6 +272,21 @@ button.ghost{color:var(--text)}
 <li>Expect plateaus. If the score hasn't moved after two checkpoints, consider a tutor for her weakest topic.</li>
 <li>Check her school's PSAT/SAT School Day options, and look up the test score policies of colleges she is considering.</li>
 </ul>
+</section>
+<section class="pane" id="p-essay">
+<h2 style="font-size:1.3rem;margin:0 0 6px">✍️ College Essay Prep</h2>
+<p class="muted">Andrea has time. The SAT comes first, and the essay is best written in summer before senior year. Starting small now makes it easier later.</p>
+<div class="card hl"><b>The basics:</b> Most colleges use the Common App, which has one main personal essay of 250 to 650 words. The same essay goes to every college on the Common App, and some colleges also ask for shorter "supplemental" essays. The essay is the one place where admissions readers hear her voice, so it matters.</div>
+<div class="card"><h2>🗓 Her timeline</h2><div class="wrap"><table><tr><td><b>Now to Feb 2027 (SAT focus)</b></td><td>Keep the SAT first. Spend about 10 minutes a week jotting ideas in the Idea Bank below. Notice moments that matter to you.</td></tr><tr><td><b>Mar to May 2027</b></td><td>After the March SAT, start the brainstorming exercises. Read 3 or 4 sample essays. Pick 2 or 3 possible topics.</td></tr><tr><td><b>June to July 2027</b></td><td>Write messy first drafts of the 2 best topics. Choose one. Get feedback from a teacher or counselor.</td></tr><tr><td><b>Aug 1, 2027</b></td><td>The Common App for her application year opens. Create the account and see that year's prompts (they are usually the same as the year before).</td></tr><tr><td><b>Aug to Sept 2027</b></td><td>Revise 2 or 3 times. Read it aloud. Ask 2 trusted readers for feedback.</td></tr><tr><td><b>Oct 2027</b></td><td>Final polish and proofread. Most Early Action/Early Decision deadlines are around Nov 1, and Regular Decision deadlines are usually in early January.</td></tr></table></div></div>
+<div class="card"><h2>🚀 How to get started (step by step)</h2><details class="qa"><summary><b>Step 1: Brainstorm (don't judge yet)</b></summary><p>Set a timer for 10 minutes for each of these and write a quick list. Short bullet points are fine.</p><ul><li>10 moments that changed how you think or act</li><li>5 things you do when no one is making you</li><li>What do friends and family always say about you?</li><li>A time you changed your mind about something</li><li>A small object, place, or routine that matters to you, and why</li><li>Something you are proud of that is not on your resume</li></ul></details><details class="qa"><summary><b>Step 2: Find a story, not a summary</b></summary><p>Admissions readers already see her grades, activities and awards. The essay should show <b>who she is</b>. Choose one small moment (a scene) and show what it reveals about her. A small story told well beats a big achievement told in general terms.</p></details><details class="qa"><summary><b>Step 3: Make a simple outline</b></summary><ul><li><b>Hook:</b> a specific moment or detail (start in the middle of the action)</li><li><b>Story:</b> what happened, with details</li><li><b>Reflection:</b> what she learned or how she changed</li><li><b>Ending:</b> what this means for who she is now and who she wants to be</li></ul></details><details class="qa"><summary><b>Step 4: Write a messy first draft</b></summary><p>Set a 30-minute timer and write without stopping or editing. It can be 900 words. Cutting is easier than starting. Nobody sees this draft.</p></details><details class="qa"><summary><b>Step 5: Revise in layers</b></summary><ol><li>Big picture: does it sound like her, and does it have a clear point?</li><li>Cut anything generic or repeated.</li><li>Replace vague words with specific details.</li><li>Read it out loud to hear awkward parts.</li><li>Proofread last: spelling, grammar, punctuation, and the word limit.</li></ol></details></div>
+<div class="card"><h2>💡 Idea Bank</h2><p class="muted">Jot down moments, memories, or ideas any time. This saves in this browser.</p>
+<textarea id="essayNotes" rows="8" placeholder="Examples: the time I taught my cousin to ride a bike. Why I cook with my grandmother. When I changed my mind about…"></textarea><div class="muted" id="essaySaved"></div></div>
+<div class="card"><h2>📝 The 7 Common App prompts</h2><p class="muted">These are the 2026-27 prompts in short form. They have stayed the same for several years, but check commonapp.org for the prompts for her application year. Remember: the story matters more than which prompt she picks.</p><p><b>1. Your background or story.</b> Share something so central to who you are that your application would feel incomplete without it.</p><p><b>2. Challenge or failure.</b> Describe a setback and what you learned from it. Focus on growth, not the hardship itself.</p><p><b>3. Questioning a belief.</b> Write about a time you questioned or challenged an idea, and what happened.</p><p><b>4. Gratitude.</b> Describe something someone did for you that surprised you, and how it affected you.</p><p><b>5. Personal growth.</b> Describe an accomplishment, event or realization that sparked a new understanding of yourself or others.</p><p><b>6. Something you love.</b> Write about a topic or idea that absorbs you so much that you lose track of time, and how you explore it.</p><p><b>7. Topic of your choice.</b> Any essay on any topic, including one you've already written.</p></div>
+<h2 style="font-size:1.1rem;margin:16px 0 4px">Do and avoid</h2><div class="grid"><div class="card hl"><b>✅ Do</b><ul><li>Use her own voice and real details</li><li>Show growth and reflection</li><li>Focus on one story or theme</li><li>Be specific: names, places, sounds, moments</li><li>Ask a teacher or counselor to read it</li></ul></div>
+<div class="card"><b>🚫 Avoid</b><ul><li>Listing achievements like a resume</li><li>Writing what she thinks colleges want to hear</li><li>Topics that are too broad for 650 words</li><li>Big words just to sound smart</li><li>Having someone else (or AI) write it. Use help for feedback only, not for writing.</li></ul></div></div>
+<div class="card"><h2>✔ Before she submits</h2><ul><li>☐ Does it sound like Andrea?</li><li>☐ Does it show one clear story or idea?</li><li>☐ Is there a specific opening moment?</li><li>☐ Does it explain what she learned or how she changed?</li><li>☐ Is it under 650 words (aim for 550 to 650)?</li><li>☐ Did at least two other people read it?</li><li>☐ Was it proofread out loud?</li></ul></div>
+<div class="card"><h2>🔗 Helpful links</h2><div class="links"><a class="link" href="https://www.commonapp.org/apply/essay-prompts" target="_blank" rel="noopener"><b>Common App essay prompts</b><span>Official prompts and word limits. Check again when her application year opens.</span></a><a class="link" href="https://www.commonapp.org" target="_blank" rel="noopener"><b>Common App</b><span>Create an account, see colleges that use it, and learn the application steps.</span></a><a class="link" href="https://www.khanacademy.org/college-careers-more/college-admissions" target="_blank" rel="noopener"><b>Khan Academy: College admissions</b><span>Free videos on writing a personal statement and applying.</span></a><a class="link" href="https://owl.purdue.edu" target="_blank" rel="noopener"><b>Purdue OWL</b><span>Writing help: structure, grammar, and revision tips.</span></a></div>
+<p class="muted" style="margin-top:10px">For examples, search "[college name] essays that worked." Many colleges publish real student essays with comments from admissions staff.</p></div>
 </section>
 <section class="pane" id="p-res">
 <h2 style="font-size:1.3rem;margin:0 0 6px">🔗 Resources</h2>
@@ -512,7 +528,7 @@ render();
     window.scrollTo(0,0);
   }
   document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
-  var h=location.hash.slice(1);show(['track','hard','plan','res'].indexOf(h)>=0?h:'track');
+  var h=location.hash.slice(1);show(['track','hard','plan','essay','res'].indexOf(h)>=0?h:'track');
 })();
 
 (function(){
@@ -521,5 +537,11 @@ render();
   document.getElementById('qt').textContent='“'+q[doy%q.length]+'”';
   var days=Math.ceil((new Date(2027,2,6)-new Date(now.getFullYear(),now.getMonth(),now.getDate()))/864e5);
   document.getElementById('cd').textContent=days>0?'⏳ '+days+' days to go':(days===0?'🚀 Test day is TODAY!':'🎉 Test day done. Great job!');
+})();
+
+(function(){
+  var K='sat-essay-ideas',ta=document.getElementById('essayNotes'),msg=document.getElementById('essaySaved');
+  try{ta.value=localStorage.getItem(K)||''}catch(e){}
+  ta.addEventListener('input',function(){try{localStorage.setItem(K,ta.value);msg.textContent='Saved ✓'}catch(e){msg.textContent='Could not save in this browser'}});
 })();
 </script></body></html>
