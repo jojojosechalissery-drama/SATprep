@@ -75,6 +75,11 @@ button.ghost{color:var(--text)}
 .chips span{background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:.88rem}
 .quote{margin-top:12px;font-style:italic;opacity:.95;border-left:3px solid rgba(255,255,255,.6);padding-left:10px}
 textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--text);font:inherit;resize:vertical}.card table td:first-child{white-space:nowrap}
+details.fold>summary{font-weight:700;font-size:1.05rem;cursor:pointer;list-style:none}details.fold>summary::-webkit-details-marker{display:none}details.fold>summary::after{content:" ▾";color:var(--muted)}details.fold[open]>summary{margin-bottom:10px}
+.pick{background:var(--hl);border-radius:10px;padding:10px 12px;line-height:1.7}
+a.btnlink{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;padding:4px 12px;border-radius:8px;font-weight:600;margin-left:4px}
+@media (prefers-color-scheme:dark){a.btnlink{color:#1b1426}}
+nav button{font-size:.95rem}
 </style></head>
 <body><main>
 <header class="hero">
@@ -84,11 +89,37 @@ textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px
 <div class="chips"><span>🎯 Goal: 1100+</span><span>📅 Test day: Mar 6, 2027</span><span id="cd">⏳ …</span></div>
 <div class="quote" id="qt"></div>
 </header>
-<nav id="nav"><button data-t="track">✅ Tracker</button><button data-t="hard">🔥 Hard Concepts</button><button data-t="plan">📋 Study Plan</button><button data-t="essay">✍️ College Essay</button><button data-t="res">🔗 Resources</button></nav>
+<nav id="nav"><button data-t="track">🏠 Home</button><button data-t="hard">🔥 Hard</button><button data-t="plan">📋 Plan</button><button data-t="essay">✍️ Essay</button><button data-t="res">🔗 Links</button></nav>
 <section class="pane" id="p-track">
 <div class="top">
   <div><h2 style="font-size:1.3rem;margin:0">🎯 Daily Progress Tracker</h2><div class="muted" id="sub"></div></div>
   <div><button class="ghost" onclick="settings()">⚙ Settings</button></div>
+</div>
+
+<div class="card" id="practiceNow">
+  <h2>🚀 Start practicing</h2>
+  <div class="pick" id="todayPick"></div>
+  <div class="muted" style="margin:10px 0 6px"><b>Practice questions</b></div>
+  <div class="links">
+<a class="link" href="https://satsuite.collegeboard.org/practice/sat-question-bank" target="_blank" rel="noopener"><b>📐 Math questions</b><span>Official Question Bank. Filter by topic and Hard.</span></a>
+<a class="link" href="https://satsuite.collegeboard.org/practice/sat-question-bank" target="_blank" rel="noopener"><b>📖 Reading &amp; Writing questions</b><span>Official Question Bank. Filter by skill.</span></a>
+<a class="link" href="https://www.khanacademy.org/test-prep/sat" target="_blank" rel="noopener"><b>🎓 Khan Academy SAT</b><span>Free lessons, videos and practice.</span></a>
+<a class="link" href="https://satsuite.collegeboard.org/practice" target="_blank" rel="noopener"><b>📝 Official practice hub</b><span>Sample questions and guides.</span></a>
+  </div>
+  <div class="muted" style="margin:10px 0 6px"><b>Full practice tests and tools</b></div>
+  <div class="links">
+<a class="link" href="https://bluebook.collegeboard.org" target="_blank" rel="noopener"><b>💻 Bluebook: full practice tests</b><span>Take the real digital SAT format.</span></a>
+<a class="link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><b>🧮 Desmos calculator</b><span>The same one used on test day.</span></a>
+<a class="link" href="https://satsuite.collegeboard.org/sat/dates-deadlines" target="_blank" rel="noopener"><b>📅 Test dates and registration</b><span>Mar 6, 2027: register by Feb 19.</span></a>
+<a class="link" href="https://www.merriam-webster.com/word-of-the-day" target="_blank" rel="noopener"><b>🔤 Word of the day</b><span>One new word each day.</span></a>
+  </div>
+  <div class="muted" style="margin:10px 0 6px"><b>More on this site</b></div>
+  <div class="links">
+<a class="link" href="#hard"><b>🔥 Harder concepts</b><span>Tough questions with answers.</span></a>
+<a class="link" href="#plan"><b>📋 Study plan</b><span>The full 18-week schedule.</span></a>
+<a class="link" href="#essay"><b>✍️ College essay</b><span>How to get started.</span></a>
+<a class="link" href="#res"><b>🔗 All resources</b><span>More reading and practice links.</span></a>
+  </div>
 </div>
 
 <div class="card">
@@ -125,12 +156,12 @@ textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px
   <div id="wkBars"></div>
   <details style="margin-top:8px"><summary class="muted" style="cursor:pointer">✏️ Change weekly targets</summary>
     <div class="row" style="margin-top:8px" id="goalIn"></div></details>
-  <h2 style="margin-top:16px;font-size:1rem">Week-by-week history <span class="muted" id="wkAll"></span></h2>
-  <div style="overflow-x:auto"><table id="wkHist"></table></div>
+  <details style="margin-top:12px"><summary class="muted">📊 Week-by-week history <span id="wkAll"></span></summary>
+  <div style="overflow-x:auto"><table id="wkHist"></table></div></details>
 </div>
 
-<div class="card">
-  <h2>📈 Practice test scores</h2>
+<details class="card fold" open>
+  <summary>📈 Practice test scores</summary>
   <div id="chart"></div>
   <div class="row">
     <div><label>Test name</label><input type="text" id="tName" placeholder="Checkpoint 1"></div>
@@ -140,11 +171,11 @@ textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px
     <div style="flex:0"><button onclick="addTest()">Add</button></div>
   </div>
   <table id="tTable" style="margin-top:10px"></table>
-</div>
+</details>
 
-<div class="card"><h2>🗓 Study calendar (18 weeks)</h2><div class="muted">Darker = more tasks completed. Sundays are rest days.</div><div class="heat" id="heat" style="margin-top:8px"></div></div>
+<details class="card fold"><summary>🗓 Study calendar (18 weeks)</summary><div class="muted">Darker = more tasks completed. Sundays are rest days.</div><div class="heat" id="heat" style="margin-top:8px"></div></details>
 
-<div class="card"><h2>🏆 Achievements <span class="muted" id="bCount"></span></h2><div class="badges" id="badges"></div></div>
+<details class="card fold"><summary>🏆 Achievements <span class="muted" id="bCount"></span></summary><div class="badges" id="badges" style="margin-top:10px"></div></details>
 </section>
 <section class="pane" id="p-hard">
 <h2 style="font-size:1.3rem;margin:0 0 6px">🔥 Harder Concepts</h2>
@@ -528,7 +559,8 @@ render();
     window.scrollTo(0,0);
   }
   document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
-  var h=location.hash.slice(1);show(['track','hard','plan','essay','res'].indexOf(h)>=0?h:'track');
+  var T=['track','hard','plan','essay','res'];var h=location.hash.slice(1);show(T.indexOf(h)>=0?h:'track');
+  window.addEventListener('hashchange',function(){var x=location.hash.slice(1);if(T.indexOf(x)>=0)show(x)});
 })();
 
 (function(){
@@ -543,5 +575,15 @@ render();
   var K='sat-essay-ideas',ta=document.getElementById('essayNotes'),msg=document.getElementById('essaySaved');
   try{ta.value=localStorage.getItem(K)||''}catch(e){}
   ta.addEventListener('input',function(){try{localStorage.setItem(K,ta.value);msg.textContent='Saved ✓'}catch(e){msg.textContent='Could not save in this browser'}});
+})();
+
+(function(){
+  var QB='https://satsuite.collegeboard.org/practice/sat-question-bank',d=new Date().getDay(),el=document.getElementById('todayPick');
+  var m=[1,3,5].indexOf(d)>=0,r=[2,4].indexOf(d)>=0,txt,url,lab;
+  if(d===0){txt='Rest day. Optionally redo a few old mistakes from your error log.';url='';}
+  else if(d===6){txt='Saturday: take a timed section or a full practice test, then review every mistake.';url='https://bluebook.collegeboard.org';lab='Open Bluebook';}
+  else if(m){txt='Today is a MATH day. Do your tasks below, then practice questions.';url=QB;lab='Open Math questions';}
+  else{txt='Today is a READING &amp; WRITING day. Do your tasks below, then practice questions.';url=QB;lab='Open R&amp;W questions';}
+  el.innerHTML='<b>⭐ Today:</b> '+txt+(url?' <a class="btnlink" href="'+url+'" target="_blank" rel="noopener">'+lab+' →</a>':'');
 })();
 </script></body></html>
