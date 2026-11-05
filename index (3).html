@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAT Prep Hub</title>
+<style>
+:root{--bg:#f4f6f5;--card:#fff;--text:#1f2937;--muted:#6b7280;--acc:#2f7d62;--acc2:#e8a317;--line:#e3e8e6;--hl:#e8f3ee;--bad:#c2410c}
+@media (prefers-color-scheme:dark){:root{--bg:#121617;--card:#1c2224;--text:#e6ecea;--muted:#98a6a2;--acc:#6fd0ae;--acc2:#f0bd4a;--line:#2b3437;--hl:#1e2e29;--bad:#fb923c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:920px;margin:0 auto;padding:16px 14px 60px}
+h1{margin:0;font-size:1.6rem}h2{font-size:1.1rem;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.muted{color:var(--muted);font-size:.9rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.stat{background:var(--hl);border-radius:10px;padding:10px;text-align:center}
+.stat b{display:block;font-size:1.5rem;color:var(--acc)}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar>div{height:100%;background:var(--acc);transition:width .4s}
+.task{display:flex;gap:10px;align-items:center;padding:9px 6px;border-bottom:1px solid var(--line);cursor:pointer}
+.task:last-child{border:0}
+.task input{width:20px;height:20px;accent-color:var(--acc)}
+.task.done span{text-decoration:line-through;color:var(--muted)}
+button,input,select{font:inherit}
+button{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:7px 14px;cursor:pointer}
+button.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+input[type=number],input[type=date],input[type=text]{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);width:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.row>div{flex:1;min-width:90px}
+label{font-size:.8rem;color:var(--muted);display:block}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.badge{border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center;font-size:.82rem}
+.badge .ic{font-size:1.8rem;display:block}
+.badge.off{opacity:.35;filter:grayscale(1)}
+.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;max-width:420px}
+.cell{aspect-ratio:1;border-radius:5px;background:var(--line);font-size:.65rem;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.l1{background:#9fd8c0;color:#134}.l2{background:#4fb08a;color:#fff}.l3{background:#1f7a5a;color:#fff}
+.cell.today{outline:2px solid var(--acc2)}
+.focus{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.focus{grid-template-columns:1fr}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--acc2);color:#222;padding:12px 18px;border-radius:12px;font-weight:600;box-shadow:0 4px 16px #0004;display:none;z-index:9}
+table{width:100%;border-collapse:collapse;font-size:.9rem}td,th{padding:6px;border-bottom:1px solid var(--line);text-align:left}
+.x{background:none;color:var(--bad);padding:2px 8px}
+
+details.qa{border-top:1px solid var(--line);padding:8px 0}details.qa>summary{cursor:pointer}details details{margin:6px 0 6px 12px;background:var(--hl);border-radius:8px;padding:6px 10px}summary{cursor:pointer}
+
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.sub{color:var(--muted)}.hl{background:var(--hl)}.wrap{overflow-x:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+th{background:var(--hl)}td,th{border:1px solid var(--line)}
+h2.sec{color:var(--acc);border-bottom:2px solid var(--line);padding-bottom:6px;margin-top:1.6em;font-size:1.15rem}
+a{color:var(--acc)}
+nav{display:flex;gap:6px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5;flex-wrap:wrap}
+nav button{background:var(--card);color:var(--text);border:1px solid var(--line);flex:1;min-width:110px;padding:10px}
+nav button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.pane{display:none}.pane.on{display:block}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+a.link{display:block;border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-decoration:none;color:var(--text)}
+a.link:hover{border-color:var(--acc)}
+a.link b{display:block;color:var(--acc)}a.link span{font-size:.85rem;color:var(--muted)}
+header{padding:10px 0 0}
+</style></head>
+<body><main>
+<header><h1>🎓 SAT Prep Hub</h1><div class="muted">Goal: 860 → 1100+ · First test: March 6, 2027</div></header>
+<nav id="nav"><button data-t="track">✅ Tracker</button><button data-t="hard">🔥 Hard Concepts</button><button data-t="plan">📋 Study Plan</button><button data-t="res">🔗 Resources</button></nav>
+<section class="pane" id="p-track">
+<div class="top">
+  <div><h2 style="font-size:1.3rem;margin:0">🎯 Daily Progress Tracker</h2><div class="muted" id="sub"></div></div>
+  <div><button class="ghost" onclick="settings()">⚙ Settings</button></div>
+</div>
+
+<div class="card">
+  <div class="top"><h2 id="lvl"></h2><span class="muted" id="xpt"></span></div>
+  <div class="bar"><div id="xpbar"></div></div>
+  <div class="stats" style="margin-top:12px">
+    <div class="stat"><b id="sStreak">0</b>🔥 day streak</div>
+    <div class="stat"><b id="sHours">0</b>hours studied</div>
+    <div class="stat"><b id="sQs">0</b>questions done</div>
+    <div class="stat"><b id="sBest">–</b>best score</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="top">
+    <div><button class="ghost" onclick="shift(-1)">◀</button> <button class="ghost" onclick="shift(1)">▶</button> <button class="ghost" onclick="goToday()">Today</button></div>
+    <h2 id="dayTitle" style="margin:0"></h2>
+  </div>
+  <div class="focus" style="margin:12px 0">
+    <div class="stat" style="text-align:left"><span class="muted">📐 Math focus this week</span><br><strong id="fM"></strong></div>
+    <div class="stat" style="text-align:left"><span class="muted">📖 Reading &amp; Writing focus</span><br><strong id="fR"></strong></div>
+  </div>
+  <div id="tasks"></div>
+  <div class="row" style="margin-top:12px">
+    <div><label>Minutes studied</label><input type="number" id="mins" min="0" max="600" onchange="saveNums()"></div>
+    <div><label>Practice questions done</label><input type="number" id="qs" min="0" max="500" onchange="saveNums()"></div>
+    <div><label>Of those, HARD questions</label><input type="number" id="hq" min="0" max="500" onchange="saveNums()"></div>
+  </div>
+  <div class="muted" id="milestone" style="margin-top:10px"></div>
+</div>
+
+<div class="card" id="weekly">
+  <div class="top"><h2 id="wkTitle">🎯 Weekly goals</h2><span class="muted" id="wkSum"></span></div>
+  <div id="wkBars"></div>
+  <details style="margin-top:8px"><summary class="muted" style="cursor:pointer">✏️ Change weekly targets</summary>
+    <div class="row" style="margin-top:8px" id="goalIn"></div></details>
+  <h2 style="margin-top:16px;font-size:1rem">Week-by-week history <span class="muted" id="wkAll"></span></h2>
+  <div style="overflow-x:auto"><table id="wkHist"></table></div>
+</div>
+
+<div class="card">
+  <h2>📈 Practice test scores</h2>
+  <div id="chart"></div>
+  <div class="row">
+    <div><label>Test name</label><input type="text" id="tName" placeholder="Checkpoint 1"></div>
+    <div><label>Date</label><input type="date" id="tDate"></div>
+    <div><label>Math (200-800)</label><input type="number" id="tM" min="200" max="800" step="10"></div>
+    <div><label>Reading &amp; Writing</label><input type="number" id="tR" min="200" max="800" step="10"></div>
+    <div style="flex:0"><button onclick="addTest()">Add</button></div>
+  </div>
+  <table id="tTable" style="margin-top:10px"></table>
+</div>
+
+<div class="card"><h2>🗓 Study calendar (16 weeks)</h2><div class="muted">Darker = more tasks completed. Sundays are rest days.</div><div class="heat" id="heat" style="margin-top:8px"></div></div>
+
+<div class="card"><h2>🏆 Achievements <span class="muted" id="bCount"></span></h2><div class="badges" id="badges"></div></div>
+</section>
+<section class="pane" id="p-hard">
+<h2 style="font-size:1.3rem;margin:0 0 6px">🔥 Harder Concepts</h2>
+<p class="muted">These are the topics where students at 860 usually lose the most points. Try each question before opening the answer. Add every miss to the error log.</p>
+<div class="card hl"><b>How to use this page:</b> Do 2 or 3 concepts per week, then go to the <a href="https://satsuite.collegeboard.org/practice/sat-question-bank" target="_blank" rel="noopener">SAT Question Bank</a>, filter by that topic and by <b>Hard</b> difficulty, and do 10 more. Log how many in the "HARD questions" box on the Tracker tab.</div>
+<div class="card"><h2>📐 Math</h2><details class="qa"><summary><b>Systems with no or infinitely many solutions</b></summary><p class="muted">Put both equations in the same form. Same slope and same intercept means infinitely many solutions. Same slope but a different intercept means none.</p><p><b>Try it:</b> For what value of k does 3x + ky = 9 together with 6x + 8y = 18 have infinitely many solutions?</p><details><summary>Show answer</summary><p>Divide the second equation by 2 to get 3x + 4y = 9. It matches the first only if k = 4.</p></details></details><details class="qa"><summary><b>Quadratics: vertex, roots and minimum value</b></summary><p class="muted">Complete the square or use x = −b/(2a) to find the vertex. The vertex gives the minimum or maximum value.</p><p><b>Try it:</b> What is the minimum value of f(x) = x² − 6x + 5?</p><details><summary>Show answer</summary><p>The vertex is at x = 3. f(3) = 9 − 18 + 5 = −4.</p></details></details><details class="qa"><summary><b>Exponential growth and decay</b></summary><p class="muted">Look for the form y = a·b^(t/period). The base b is the factor per period, and the exponent counts the periods.</p><p><b>Try it:</b> A population of 500 triples every 4 years. How large is it after 8 years?</p><details><summary>Show answer</summary><p>8 years is 2 periods, so 500 × 3² = 4,500.</p></details></details><details class="qa"><summary><b>Circle equations</b></summary><p class="muted">Complete the square in x and in y to reach (x − h)² + (y − k)² = r².</p><p><b>Try it:</b> Find the center and radius of x² + y² − 6x + 4y = 12.</p><details><summary>Show answer</summary><p>(x − 3)² + (y + 2)² = 12 + 9 + 4 = 25. The center is (3, −2) and the radius is 5.</p></details></details><details class="qa"><summary><b>Percent change traps</b></summary><p class="muted">Percent changes multiply and do not add. Always find what the percent is of.</p><p><b>Try it:</b> A price rises 20% and then falls 20%. What is the net change?</p><details><summary>Show answer</summary><p>1.2 × 0.8 = 0.96, so the net change is a 4% decrease.</p></details></details><details class="qa"><summary><b>Radical and rational equations (extraneous solutions)</b></summary><p class="muted">After squaring both sides, always plug your answers back into the original equation.</p><p><b>Try it:</b> Solve √(x + 6) = x.</p><details><summary>Show answer</summary><p>x + 6 = x², so x = 3 or x = −2. Checking shows −2 fails, so x = 3.</p></details></details><details class="qa"><summary><b>Function transformations</b></summary><p class="muted">f(x − a) moves the graph right by a. f(x) + b moves it up by b. −f(x) flips it over the x-axis.</p><p><b>Try it:</b> How is g(x) = f(x − 3) + 2 related to f(x)?</p><details><summary>Show answer</summary><p>It is shifted 3 units right and 2 units up.</p></details></details><details class="qa"><summary><b>Statistics: what changes when data changes</b></summary><p class="muted">The mean is pulled by outliers, the median is not. Standard deviation measures spread from the mean.</p><p><b>Try it:</b> For {2, 4, 6, 8, 10}, what happens to the mean and standard deviation if you add another 6?</p><details><summary>Show answer</summary><p>The mean stays 6 and the standard deviation decreases, because the new point sits exactly at the center.</p></details></details><details class="qa"><summary><b>Right-triangle trig</b></summary><p class="muted">sin A = cos(90° − A). Remember SOH-CAH-TOA, and check whether the problem uses degrees or radians.</p><p><b>Try it:</b> In a right triangle, sin A = 3/5. What is cos(90° − A)?</p><details><summary>Show answer</summary><p>cos(90° − A) = sin A = 3/5.</p></details></details><details class="qa"><summary><b>Desmos shortcuts</b></summary><p class="muted">Type both equations to find intersections quickly. Use sliders for unknown constants. Click points to see exact values.</p><p><b>Try it:</b> Graph y = x² − 6x + 5 and y = −x + 5. Where do they meet?</p><details><summary>Show answer</summary><p>They meet at (0, 5) and (5, 0). You can check this algebraically: x² − 5x = 0.</p></details></details></div>
+<div class="card"><h2>📖 Reading &amp; Writing</h2><details class="qa"><summary><b>Run-ons and comma splices</b></summary><p class="muted">Two complete sentences need a period, a semicolon, or a comma plus a conjunction (FANBOYS). A comma alone is not enough.</p><p><b>Try it:</b> Fix this: 'The experiment failed, the team learned from it.'</p><details><summary>Show answer</summary><p>Use a semicolon: 'The experiment failed; the team learned from it.' A period or a comma plus 'but' also works.</p></details></details><details class="qa"><summary><b>Subject-verb agreement with interruptions</b></summary><p class="muted">Cross out any phrase between the subject and the verb. The verb agrees with the real subject.</p><p><b>Try it:</b> Choose: 'The box of old letters (is / are) in the attic.'</p><details><summary>Show answer</summary><p>'Is.' The subject is 'box,' not 'letters.'</p></details></details><details class="qa"><summary><b>Modifier placement</b></summary><p class="muted">An opening phrase must describe the noun that comes right after the comma.</p><p><b>Try it:</b> Fix this: 'Walking down the street, the trees looked beautiful.'</p><details><summary>Show answer</summary><p>The trees were not walking. Better: 'Walking down the street, she thought the trees looked beautiful.'</p></details></details><details class="qa"><summary><b>Pronouns and apostrophes</b></summary><p class="muted">Its = belongs to it. It's = it is. Whose vs who's follows the same pattern. A pronoun must clearly refer to one noun.</p><p><b>Try it:</b> Choose: 'The company changed (its / it's) policy because (its / it's) customers complained.'</p><details><summary>Show answer</summary><p>'Its policy' (possession) and 'because its customers complained' (possession).</p></details></details><details class="qa"><summary><b>Transitions</b></summary><p class="muted">Decide the relationship between the two ideas first: contrast, cause, addition, or example. Then pick the matching word.</p><p><b>Try it:</b> 'The data were incomplete. ___, the researchers published the study.' Which fits: Therefore, For example, or However?</p><details><summary>Show answer</summary><p>'However.' The second sentence goes against what you would expect after incomplete data.</p></details></details><details class="qa"><summary><b>Words in context</b></summary><p class="muted">Cover the word, predict your own word, then choose the closest option. Many words have a second meaning that the SAT likes to test.</p><p><b>Try it:</b> 'The senator's remarks were guarded.' What does 'guarded' most nearly mean?</p><details><summary>Show answer</summary><p>Cautious. It does not mean protected or watched.</p></details></details><details class="qa"><summary><b>Inference traps</b></summary><p class="muted">Wrong answers are often too extreme (always, never, all), out of scope, or true but not supported by the text.</p><p><b>Try it:</b> A passage says some bees can learn symbols. Which conclusion is best supported: all bees can read, or bees show a capacity for learning?</p><details><summary>Show answer</summary><p>'Bees show a capacity for learning.' The first claim is too extreme.</p></details></details><details class="qa"><summary><b>Command of evidence (graphs and data)</b></summary><p class="muted">Check every number in each answer choice against the graph. Wrong choices often mix up two categories or years.</p><p><b>Try it:</b> Why is it risky to choose an answer after checking only one number?</p><details><summary>Show answer</summary><p>The choice may contain a second claim that is wrong. Every part of an answer must match the data.</p></details></details><details class="qa"><summary><b>Cross-text connections</b></summary><p class="muted">Summarize each author's main claim in one phrase. Then decide whether the second author agrees, disagrees, or qualifies the first.</p><p><b>Try it:</b> What is the first step on a paired-passage question?</p><details><summary>Show answer</summary><p>Write a one-phrase summary of each author's position before reading the choices.</p></details></details><details class="qa"><summary><b>Rhetorical synthesis</b></summary><p class="muted">Reread the goal in the question. The correct answer is the one that serves that specific goal, not just a true statement from the notes.</p><p><b>Try it:</b> If the goal is 'to emphasize the project's cost,' should you choose the statement about its design or its price?</p><details><summary>Show answer</summary><p>Choose the one about its price. It must match the stated goal.</p></details></details><details class="qa"><summary><b>Concision</b></summary><p class="muted">The shortest answer that keeps the full meaning is usually right. Watch for redundancy.</p><p><b>Try it:</b> Which is better: 'past history' or 'history'?</p><details><summary>Show answer</summary><p>'History.' 'Past' repeats what the word already means.</p></details></details></div>
+</section>
+<section class="pane" id="p-plan">
+<h2 style="font-size:1.3rem;margin:0">📋 16-Week Study Plan</h2>
+<p class="sub">A 16-week, step-by-step plan for an 11th grader starting at 860. Target: 1100+ on the March 6, 2027 SAT, with a retake in May or June if needed.</p>
+
+<div class="card hl"><strong>Realistic expectations:</strong> Going from 860 to 1100+ (a gain of about 240) is achievable with steady, consistent work, but results vary. Students who review their mistakes carefully improve the most. Aim for steady progress first (1000, then 1100), not perfection.</div>
+
+<h2 class="sec">1. The test at a glance (digital SAT)</h2>
+<div class="grid">
+<div class="card"><strong>Reading &amp; Writing</strong><br>54 questions, 2 modules, 64 minutes. Short passages, one question each.</div>
+<div class="card"><strong>Math</strong><br>44 questions, 2 modules, 70 minutes. Calculator allowed throughout (Desmos is built in).</div>
+<div class="card"><strong>Scoring</strong><br>400 to 1600 total. Each section is 200 to 800. The second module adapts to how she does on the first.</div>
+</div>
+<p class="sub">The test is taken on a laptop or tablet in the free <em>Bluebook</em> app. Her Huntington test may have been a different format, so her first step is a Bluebook baseline (see Week 1). Please confirm format details at collegeboard.org.</p>
+
+<h2 class="sec">2. Free official resources</h2>
+<ul>
+<li><strong>Bluebook app</strong> (College Board): full-length, adaptive practice tests that match the real exam. Download from collegeboard.org. Use these for all full tests.</li>
+<li><strong>Official Digital SAT Prep on Khan Academy</strong> (free): lessons, quizzes and practice by skill, and it can link to her College Board account.</li>
+<li><strong>College Board Question Bank</strong> (free): thousands of real questions you can filter by topic and difficulty. Perfect for targeted daily practice.</li>
+<li><strong>Desmos</strong> (desmos.com/calculator): practice with it every day, since it is the same calculator used in the test.</li>
+</ul>
+
+<h2 class="sec">3. Key dates (2026-27)</h2>
+<div class="wrap"><table>
+<tr><th>Test date</th><th>Register by</th><th>Use it for</th></tr>
+<tr><td>Dec 5, 2026</td><td>Nov 20, 2026</td><td>Optional. Too early for most students starting now.</td></tr>
+<tr><td><strong>Mar 6, 2027</strong></td><td>Feb 19, 2027</td><td><strong>First real attempt (recommended)</strong></td></tr>
+<tr><td>May 1, 2027</td><td>Apr 16, 2027</td><td>Retake</td></tr>
+<tr><td>Jun 5, 2027</td><td>May 21, 2027</td><td>Final retake before senior year</td></tr>
+</table></div>
+<p class="sub">Dates were checked against the College Board schedule, but please verify at satsuite.collegeboard.org before registering. The U.S. fee is about $68.</p>
+
+<h2 class="sec">4. Her daily routine (about 60 to 75 minutes)</h2>
+<div class="wrap"><table>
+<tr><th>Day</th><th>Plan</th></tr>
+<tr><td>Mon</td><td><strong>Math:</strong> 30 min Khan lesson or concept review + 15 min practice questions on the week's math topic</td></tr>
+<tr><td>Tue</td><td><strong>Reading &amp; Writing:</strong> 30 min lesson/review + 15 min practice questions on the week's RW topic</td></tr>
+<tr><td>Wed</td><td><strong>Math:</strong> 40 min timed question set (Question Bank) + 20 min review</td></tr>
+<tr><td>Thu</td><td><strong>Reading &amp; Writing:</strong> 40 min timed set + 20 min review, and 10 min vocabulary</td></tr>
+<tr><td>Fri</td><td><strong>Mixed:</strong> 20 min math + 20 min RW, plus update the error log</td></tr>
+<tr><td>Sat</td><td><strong>Checkpoint weeks:</strong> full Bluebook test. <strong>Other weeks:</strong> one timed section (Math or RW, alternating), then review</td></tr>
+<tr><td>Sun</td><td><strong>Rest</strong>, or 20 minutes redoing the week's error log</td></tr>
+</table></div>
+
+<h3>The most important habit: the error log</h3>
+<p>For every missed or guessed question, write one line: <em>topic, why it was missed (concept gap, careless mistake, ran out of time, misread), and the correct method</em>. Redo each logged question one week later. This is where most of the score improvement comes from.</p>
+
+<h2 class="sec">5. The 16-week schedule</h2>
+<div class="wrap"><table>
+<tr><th>Week</th><th>Math focus</th><th>Reading &amp; Writing focus</th><th>Milestone</th></tr>
+<tr><td>1</td><td>Linear equations and inequalities</td><td>Words in context (vocabulary)</td><td><strong>Baseline:</strong> full Bluebook test, build the error log</td></tr>
+<tr><td>2</td><td>Linear functions, systems of equations</td><td>Sentence boundaries, punctuation (commas, semicolons, colons)</td><td></td></tr>
+<tr><td>3</td><td>Ratios, rates, percents</td><td>Subject-verb agreement, verb tense, pronouns</td><td></td></tr>
+<tr><td>4</td><td>Unit conversion, tables, scatterplots</td><td>Transitions and rhetorical synthesis</td><td><strong>Checkpoint 1</strong> (target 920+)</td></tr>
+<tr><td>5</td><td>Quadratics</td><td>Central ideas and details</td><td></td></tr>
+<tr><td>6</td><td>Polynomials, exponentials</td><td>Command of evidence (text and graphs)</td><td></td></tr>
+<tr><td>7</td><td>Nonlinear functions, graph transformations</td><td>Inferences</td><td></td></tr>
+<tr><td>8</td><td>Review of weeks 1 to 7 errors</td><td>Review of weeks 1 to 7 errors</td><td><strong>Checkpoint 2</strong> (target 1000+)</td></tr>
+<tr><td>9</td><td>Statistics (mean, median, SD), probability</td><td>Text structure and purpose</td><td></td></tr>
+<tr><td>10</td><td>Area, volume, geometry</td><td>Cross-text connections</td><td></td></tr>
+<tr><td>11</td><td>Circles, triangles, right-triangle trig</td><td>Mixed hard questions</td><td></td></tr>
+<tr><td>12</td><td>Weakest 2 math topics</td><td>Weakest 2 RW topics</td><td><strong>Checkpoint 3</strong> (target 1070+)</td></tr>
+<tr><td>13</td><td>Targeted timed sets, Desmos shortcuts</td><td>Targeted timed sets</td><td></td></tr>
+<tr><td>14</td><td>Hard-question practice, pacing</td><td>Hard-question practice, pacing</td><td></td></tr>
+<tr><td>15</td><td>Final review of the error log</td><td>Final review of the error log</td><td><strong>Final full test</strong> (target 1100+)</td></tr>
+<tr><td>16</td><td colspan="2">Light review only (30 min/day). Sleep well, prepare the laptop and ID, charge the device.</td><td><strong>Test day: Mar 6</strong></td></tr>
+</table></div>
+<p class="sub">Take one official Bluebook practice test per checkpoint (they are limited, so don't use them up early). Use the Question Bank for everything else.</p>
+
+<h2 class="sec">6. Topic checklists</h2>
+<div class="grid">
+<div class="card"><h3>Math</h3>
+<ul>
+<li><strong>Algebra:</strong> linear equations, systems, inequalities, linear word problems</li>
+<li><strong>Advanced math:</strong> quadratics, polynomials, exponentials, function notation, rational and radical equations</li>
+<li><strong>Problem solving and data:</strong> ratios, percents, unit conversion, statistics, probability, scatterplots</li>
+<li><strong>Geometry and trig:</strong> area, volume, triangles, circles, sine/cosine/tangent</li>
+<li><strong>Tool skills:</strong> graph equations in Desmos, find intersections, use sliders</li>
+</ul></div>
+<div class="card"><h3>Reading &amp; Writing</h3>
+<ul>
+<li><strong>Craft and structure:</strong> vocabulary in context, text structure, cross-text connections</li>
+<li><strong>Information and ideas:</strong> central ideas, evidence, inferences</li>
+<li><strong>Standard English conventions:</strong> punctuation, agreement, tense, pronouns, modifiers</li>
+<li><strong>Expression of ideas:</strong> transitions, rhetorical synthesis</li>
+<li><strong>Habit:</strong> read 15 to 20 minutes a day (news, long-form articles, fiction)</li>
+</ul></div>
+</div>
+
+<h2 class="sec">7. Test-taking strategies</h2>
+<ul>
+<li>There is no penalty for wrong answers, so never leave a question blank.</li>
+<li>Math: roughly 1.5 minutes per question. Skip and flag hard ones, then return.</li>
+<li>Reading &amp; Writing: roughly 1 minute per question. Read the question first, then the passage.</li>
+<li>For grammar questions, find the rule being tested before looking at the choices.</li>
+<li>Use elimination: wrong answers usually have a specific flaw (too extreme, off-topic, or unsupported).</li>
+<li>Do the first module of each section carefully, because it affects how hard the second one is.</li>
+</ul>
+
+<h2 class="sec">8. Tracking progress</h2>
+<div class="wrap"><table>
+<tr><th>Test</th><th>Date</th><th>Math</th><th>R&amp;W</th><th>Total</th><th>Top 3 weak topics</th></tr>
+<tr><td>Huntington sample</td><td></td><td></td><td></td><td>860</td><td></td></tr>
+<tr><td>Baseline (Bluebook)</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Checkpoint 1</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Checkpoint 2</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Checkpoint 3</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>Final practice</td><td></td><td></td><td></td><td></td><td></td></tr>
+</table></div>
+
+<h2 class="sec">9. For parents</h2>
+<ul>
+<li>Protect the schedule: same time each day, phone away, a quiet spot.</li>
+<li>Ask about the error log, not just scores.</li>
+<li>Expect plateaus. If the score hasn't moved after two checkpoints, consider a tutor for her weakest topic.</li>
+<li>Check her school's PSAT/SAT School Day options, and look up the test score policies of colleges she is considering.</li>
+</ul>
+</section>
+<section class="pane" id="p-res">
+<h2 style="font-size:1.3rem;margin:0 0 6px">🔗 Resources</h2>
+<p class="muted">All links open in a new tab. Official College Board and Khan Academy tools are free.</p>
+<div class="card"><h2>⭐ Start here: official SAT tools</h2><div class="links">
+<a class="link" href="https://bluebook.collegeboard.org" target="_blank" rel="noopener"><b>Bluebook app</b><span>Download the testing app. Full-length adaptive practice tests that match the real exam.</span></a>
+<a class="link" href="https://satsuite.collegeboard.org/practice" target="_blank" rel="noopener"><b>Official SAT practice</b><span>College Board's practice hub: tests, sample questions and guides.</span></a>
+<a class="link" href="https://satsuite.collegeboard.org/practice/sat-question-bank" target="_blank" rel="noopener"><b>SAT Question Bank</b><span>Filter real questions by topic and difficulty. Great for daily practice.</span></a>
+<a class="link" href="https://www.khanacademy.org/test-prep/sat" target="_blank" rel="noopener"><b>Khan Academy: Official Digital SAT Prep</b><span>Free lessons, videos and practice by skill, linked to College Board.</span></a>
+<a class="link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><b>Desmos graphing calculator</b><span>The same calculator built into the digital SAT. Practice with it every day.</span></a>
+</div></div>
+<div class="card"><h2>📅 Register and plan</h2><div class="links">
+<a class="link" href="https://satsuite.collegeboard.org/sat/dates-deadlines" target="_blank" rel="noopener"><b>Test dates and deadlines</b><span>Official schedule. Target: Mar 6, 2027 (register by Feb 19).</span></a>
+<a class="link" href="https://satsuite.collegeboard.org/sat/registration" target="_blank" rel="noopener"><b>Register for the SAT</b><span>Sign in to your College Board account to register.</span></a>
+<a class="link" href="https://satsuite.collegeboard.org/sat/what-to-expect" target="_blank" rel="noopener"><b>What to expect on test day</b><span>Format, timing, what to bring, and testing policies.</span></a>
+<a class="link" href="https://bigfuture.collegeboard.org" target="_blank" rel="noopener"><b>BigFuture</b><span>College search, scholarships and planning tools.</span></a>
+</div></div>
+<div class="card"><h2>📐 Math practice</h2><div class="links">
+<a class="link" href="https://www.khanacademy.org/math/algebra" target="_blank" rel="noopener"><b>Khan Academy: Algebra</b><span>Linear equations, systems, quadratics and more.</span></a>
+<a class="link" href="https://www.khanacademy.org/math/geometry" target="_blank" rel="noopener"><b>Khan Academy: Geometry</b><span>Area, volume, triangles, circles and trig basics.</span></a>
+<a class="link" href="https://www.khanacademy.org/math/statistics-probability" target="_blank" rel="noopener"><b>Khan Academy: Statistics and probability</b><span>Data analysis, scatterplots, probability.</span></a>
+<a class="link" href="https://www.desmos.com/calculator" target="_blank" rel="noopener"><b>Desmos</b><span>Practice graphing equations and finding intersections.</span></a>
+</div></div>
+<div class="card"><h2>📖 Reading and Writing practice</h2><div class="links">
+<a class="link" href="https://www.khanacademy.org/humanities/grammar" target="_blank" rel="noopener"><b>Khan Academy: Grammar</b><span>Punctuation, sentence structure, agreement and more.</span></a>
+<a class="link" href="https://owl.purdue.edu/owl/general_writing/index.html" target="_blank" rel="noopener"><b>Purdue OWL</b><span>Trusted grammar and writing reference.</span></a>
+<a class="link" href="https://www.merriam-webster.com/word-of-the-day" target="_blank" rel="noopener"><b>Merriam-Webster Word of the Day</b><span>Build vocabulary with one word a day.</span></a>
+<a class="link" href="https://www.gutenberg.org" target="_blank" rel="noopener"><b>Project Gutenberg</b><span>Free classic books. Good for reading older, harder prose.</span></a>
+</div></div>
+<div class="card"><h2>📰 Daily reading (15 to 20 min)</h2><p class="muted">The SAT uses passages from literature, history, science and social studies. Reading varied, well-written articles every day helps.</p><div class="links">
+<a class="link" href="https://www.smithsonianmag.com" target="_blank" rel="noopener"><b>Smithsonian Magazine</b><span>History, science, culture and nature.</span></a>
+<a class="link" href="https://www.scientificamerican.com" target="_blank" rel="noopener"><b>Scientific American</b><span>Science articles in clear prose.</span></a>
+<a class="link" href="https://www.theatlantic.com" target="_blank" rel="noopener"><b>The Atlantic</b><span>Essays and long-form writing.</span></a>
+<a class="link" href="https://www.nytimes.com/section/learning" target="_blank" rel="noopener"><b>NYT Learning Network</b><span>Free articles, writing prompts and student features.</span></a>
+</div></div>
+<div class="card hl"><strong>Tip:</strong> Use official sources (College Board and Khan Academy) for full tests, since the question style matches the real exam. Websites change their pages sometimes, so if a link moves, search the site name.</div>
+</section>
+</main>
+<script>
+// ---------- Data ----------
+const KEY='sat-tracker-v1';
+const WEEKS=[
+['Linear equations & inequalities','Words in context','Baseline test'],
+['Linear functions & systems','Punctuation & sentence boundaries',''],
+['Ratios, rates, percents','Subject-verb, tense, pronouns',''],
+['Unit conversion, tables, scatterplots','Transitions & rhetorical synthesis','Checkpoint 1 (target 920+)'],
+['Quadratics','Central ideas & details',''],
+['Polynomials & exponentials','Command of evidence',''],
+['Nonlinear functions & transformations','Inferences',''],
+['Review weeks 1-7 errors','Review weeks 1-7 errors','Checkpoint 2 (target 1000+)'],
+['Statistics & probability','Text structure & purpose',''],
+['Area, volume, geometry','Cross-text connections',''],
+['Circles, triangles, trig','Mixed hard questions',''],
+['Weakest 2 math topics','Weakest 2 RW topics','Checkpoint 3 (target 1070+)'],
+['Targeted timed sets + Desmos','Targeted timed sets',''],
+['Hard questions & pacing','Hard questions & pacing',''],
+['Final error-log review','Final error-log review','Final full test (target 1100+)'],
+['Light review, rest, prep','Light review, rest, prep','TEST DAY: Mar 6']];
+const PLAN={
+0:['Rest day, or redo 5 old error-log questions (optional 20 min)'],
+1:['Math lesson / concept review (30 min)','Math practice questions (15 min)','Add misses to the error log'],
+2:['Reading & Writing lesson / review (30 min)','Reading & Writing practice questions (15 min)','Add misses to the error log'],
+3:['Timed math set (40 min)','Review every math mistake (20 min)','Practice with Desmos (10 min)'],
+4:['Timed Reading & Writing set (40 min)','Review every mistake (20 min)','Vocabulary / read an article (10 min)'],
+5:['Mixed math practice (20 min)','Mixed Reading & Writing practice (20 min)','Update the error log'],
+6:['Timed section or full Bluebook test','Review all mistakes','Log the score below (if a full test)']};
+let S=load();
+let view=ds(new Date());
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x)return x}catch(e){}
+  return {start:'2026-11-09',days:{},tests:[{name:'Huntington sample',date:'2026-11-01',total:860}],seen:[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function ds(d){const z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())}
+function pd(s){const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)}
+function addDays(s,n){const d=pd(s);d.setDate(d.getDate()+n);return ds(d)}
+function dayNum(s){return Math.floor((pd(s)-pd(S.start))/864e5)}
+function day(s){return S.days[s]||(S.days[s]={t:[],m:0,q:0})}
+function doneCount(s){const d=S.days[s];return d?d.t.filter(Boolean).length:0}
+
+// ---------- Stats ----------
+function stats(){
+  let tasks=0,mins=0,qs=0;
+  for(const k in S.days){const d=S.days[k];tasks+=d.t.filter(Boolean).length;mins+=+d.m||0;qs+=+d.q||0}
+  const best=Math.max(0,...S.tests.map(t=>t.total));
+  let streak=0,c=ds(new Date());
+  if(!active(c))c=addDays(c,-1);
+  for(let i=0;i<400;i++){
+    if(active(c))streak++;else if(pd(c).getDay()!==0)break;
+    c=addDays(c,-1)}
+  const xp=tasks*10+Math.floor(mins/5)+Math.floor(qs/5)+S.tests.length*25;
+  return{tasks,mins,qs,best,streak,xp}}
+function active(s){const d=S.days[s];return d&&(d.t.some(Boolean)||d.m>0||d.q>0)}
+function perfectWeek(){
+  for(let w=0;w<16;w++){let ok=true;const st=addDays(S.start,w*7);
+    for(let i=0;i<6;i++){const s=addDays(st,i);if(pd(s).getDay()===0)continue;if(doneCount(s)<3){ok=false;break}}
+    if(ok&&pd(addDays(st,6))<=new Date())return true}
+  return false}
+const BADGES=[
+['🚀','First Step','Complete your first task',s=>s.tasks>=1],
+['🔥','3-Day Streak','3 days in a row',s=>s.streak>=3],
+['⚡','Week Warrior','7-day streak',s=>s.streak>=7],
+['💪','Two Weeks Strong','14-day streak',s=>s.streak>=14],
+['👑','Unstoppable','30-day streak',s=>s.streak>=30],
+['✅','Perfect Week','Finish every task Mon-Sat in one week',()=>perfectWeek()],
+['📝','100 Questions','Practice 100 questions',s=>s.qs>=100],
+['📚','500 Questions','Practice 500 questions',s=>s.qs>=500],
+['🧠','1,000 Questions','Practice 1,000 questions',s=>s.qs>=1000],
+['⏱','10 Hours','Study for 10 hours',s=>s.mins>=600],
+['⏳','25 Hours','Study for 25 hours',s=>s.mins>=1500],
+['🏅','50 Hours','Study for 50 hours',s=>s.mins>=3000],
+['📊','Test Taker','Log a practice test',()=>S.tests.length>=2],
+['📈','+50 Points','Beat your baseline by 50',s=>s.best>=910],
+['🌟','+100 Points','Beat your baseline by 100',s=>s.best>=960],
+['🎓','1000 Club','Score 1000+',s=>s.best>=1000],
+['💎','1100 Club','Score 1100+ (goal!)',s=>s.best>=1100],
+['🏆','1200 Club','Score 1200+',s=>s.best>=1200]];
+
+// ---------- Render ----------
+function render(){
+  const st=stats();
+  document.getElementById('sub').textContent='Goal: 1100+ on Mar 6, 2027 · Baseline 860';
+  const lvl=Math.floor(st.xp/150)+1;
+  document.getElementById('lvl').textContent='Level '+lvl+' '+['Rookie','Learner','Climber','Scholar','Pro','Master','Legend'][Math.min(6,Math.floor((lvl-1)/2))];
+  document.getElementById('xpt').textContent=st.xp+' XP · '+(150-st.xp%150)+' to next level';
+  document.getElementById('xpbar').style.width=(st.xp%150)/150*100+'%';
+  sStreak.textContent=st.streak;sHours.textContent=(st.mins/60).toFixed(1);sQs.textContent=st.qs;sBest.textContent=st.best||'–';
+  // day
+  const n=dayNum(view),wk=Math.floor(n/7);
+  const dow=pd(view).getDay();
+  dayTitle.textContent=pd(view).toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
+  const W=WEEKS[wk];
+  fM.textContent=W?W[0]:(n<0?'Plan starts '+S.start:'Plan complete 🎉');
+  fR.textContent=W?W[1]:'–';
+  milestone.textContent=W&&W[2]?'🎯 Week '+(wk+1)+' milestone: '+W[2]:(W?'Week '+(wk+1)+' of 16':'');
+  const d=day(view);const list=PLAN[dow];
+  tasks.innerHTML=list.map((t,i)=>`<label class="task ${d.t[i]?'done':''}"><input type="checkbox" ${d.t[i]?'checked':''} onchange="toggle(${i},this.checked)"><span>${t}</span></label>`).join('');
+  mins.value=d.m||'';qs.value=d.q||'';hq.value=d.h||'';
+  renderChart();renderTests();renderHeat();renderBadges(st);}
+function toggle(i,v){day(view).t[i]=v;save();render();checkBadges()}
+function saveNums(){const d=day(view);d.m=+mins.value||0;d.q=+qs.value||0;d.h=+hq.value||0;save();render();checkBadges()}
+function shift(n){view=addDays(view,n);render()}
+function goToday(){view=ds(new Date());render()}
+
+function renderHeat(){
+  const h=document.getElementById('heat');let html='';const today=ds(new Date());
+  ['S','M','T','W','T','F','S'].forEach(x=>html+=`<div class="muted" style="text-align:center">${x}</div>`);
+  const first=pd(S.start).getDay();for(let i=0;i<first;i++)html+='<div></div>';
+  for(let i=0;i<112;i++){const s=addDays(S.start,i);const c=doneCount(s);
+    const cls=c>=3?'l3':c==2?'l2':(c==1||active(s))?'l1':'';
+    html+=`<div class="cell ${cls} ${s===today?'today':''}" title="${s}" style="cursor:pointer" onclick="view='${s}';render();scrollTo(0,0)">${pd(s).getDate()}</div>`}
+  h.innerHTML=html}
+
+function renderBadges(st){
+  let got=0;
+  badges.innerHTML=BADGES.map(b=>{const ok=b[3](st);if(ok)got++;
+    return `<div class="badge ${ok?'':'off'}"><span class="ic">${b[0]}</span><b>${b[1]}</b><br><span class="muted">${b[2]}</span></div>`}).join('');
+  bCount.textContent='('+got+'/'+BADGES.length+')'}
+function checkBadges(){
+  const st=stats();
+  BADGES.forEach(b=>{if(b[3](st)&&!S.seen.includes(b[1])){S.seen.push(b[1]);save();toast(b[0]+' Achievement unlocked: '+b[1]+'!')}})}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
+
+// ---------- Tests ----------
+function addTest(){
+  const m=+tM.value,r=+tR.value;
+  if(!(m>=200&&m<=800&&r>=200&&r<=800)){toast('Enter section scores between 200 and 800');return}
+  S.tests.push({name:tName.value||'Practice test',date:tDate.value||ds(new Date()),m,r,total:m+r});
+  S.tests.sort((a,b)=>a.date<b.date?-1:1);
+  tName.value=tM.value=tR.value='';save();render();checkBadges()}
+function delTest(i){if(i>0&&confirm('Delete this test?')){S.tests.splice(i,1);save();render()}}
+function renderTests(){
+  tTable.innerHTML='<tr><th>Test</th><th>Date</th><th>Math</th><th>R&W</th><th>Total</th><th></th></tr>'+
+  S.tests.map((t,i)=>`<tr><td>${esc(t.name)}</td><td>${t.date}</td><td>${t.m||'–'}</td><td>${t.r||'–'}</td><td><b>${t.total}</b></td><td>${i?`<button class="x" onclick="delTest(${i})">✕</button>`:''}</td></tr>`).join('')}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function renderChart(){
+  const T=S.tests,W=600,H=220,p=34,lo=800,hi=1300;
+  const x=i=>p+(T.length<2?0.5:i/(T.length-1))*(W-2*p),y=v=>H-p-(v-lo)/(hi-lo)*(H-2*p);
+  let g='';[800,900,1000,1100,1200,1300].forEach(v=>g+=`<line x1="${p}" x2="${W-p}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="4" y="${y(v)+4}" font-size="11" fill="var(--muted)">${v}</text>`);
+  g+=`<line x1="${p}" x2="${W-p}" y1="${y(1100)}" y2="${y(1100)}" stroke="var(--acc2)" stroke-dasharray="6 4" stroke-width="2"/><text x="${W-p-70}" y="${y(1100)-5}" font-size="11" fill="var(--acc2)">Goal 1100</text>`;
+  const pts=T.map((t,i)=>x(i)+','+y(Math.max(lo,Math.min(hi,t.total)))).join(' ');
+  g+=`<polyline points="${pts}" fill="none" stroke="var(--acc)" stroke-width="3"/>`;
+  T.forEach((t,i)=>g+=`<circle cx="${x(i)}" cy="${y(Math.max(lo,Math.min(hi,t.total)))}" r="5" fill="var(--acc)"/><text x="${x(i)}" y="${y(Math.max(lo,Math.min(hi,t.total)))-10}" font-size="12" text-anchor="middle" fill="var(--text)">${t.total}</text>`);
+  chart.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">${g}</svg>`}
+
+// ---------- Settings ----------
+function settings(){
+  const a=prompt('Plan start date (YYYY-MM-DD). It should be a Monday.',S.start);
+  if(a&&/^\d{4}-\d{2}-\d{2}$/.test(a)){S.start=a;save();render()}
+  else if(a!==null&&a!==''){toast('Invalid date format')}
+  if(confirm('Also want to reset ALL progress? (Cancel to keep it)')&&confirm('This cannot be undone. Reset everything?')){
+    S={start:S.start,days:{},tests:[{name:'Huntington sample',date:'2026-11-01',total:860}],seen:[]};save();render()}}
+
+// ---------- Weekly goals ----------
+S.goals=S.goals||{m:360,q:120,t:15,h:30};
+function wkStart(s){const d=pd(s);return addDays(s,-((d.getDay()+6)%7))}
+function wkStats(ws){let m=0,q=0,t=0,h=0;for(let i=0;i<7;i++){const d=S.days[addDays(ws,i)];if(d){m+=+d.m||0;q+=+d.q||0;h+=+d.h||0;t+=d.t.filter(Boolean).length}}return{m,q,t,h}}
+function hits(w){const g=S.goals;return [w.m>=g.m,w.q>=g.q,w.t>=g.t,w.h>=g.h]}
+function nHit(w){return hits(w).filter(Boolean).length}
+function weekIdx(i){return wkStats(addDays(wkStart(S.start),i*7))}
+function lastWeekIdx(){return Math.max(0,Math.min(15,Math.floor((pd(wkStart(ds(new Date())))-pd(wkStart(S.start)))/6048e5)))}
+function anyFull(){for(let i=0;i<=lastWeekIdx();i++)if(nHit(weekIdx(i))===4)return true;return false}
+function goalStreak(n){let run=0;for(let i=0;i<=lastWeekIdx();i++){run=nHit(weekIdx(i))>=3?run+1:0;if(run>=n)return true}return false}
+BADGES.push(['🎯','Goal Getter','Hit all 4 weekly goals in one week',()=>anyFull()],['🧲','Consistent','Hit 3+ weekly goals, 3 weeks in a row',()=>goalStreak(3)]);
+function setGoal(k,v){S.goals[k]=Math.max(1,+v||1);save();renderWeekly()}
+function renderWeekly(){
+  const g=S.goals,ws=wkStart(view),we=addDays(ws,6),w=wkStats(ws),today=ds(new Date());
+  const past=we<today,elapsed=past?7:Math.max(0,Math.min(7,Math.floor((pd(today)-pd(ws))/864e5)+1));
+  const fmt=s=>pd(s).toLocaleDateString(undefined,{month:'short',day:'numeric'});
+  document.getElementById('wkTitle').textContent='🎯 Weekly goals: '+fmt(ws)+' – '+fmt(we);
+  const items=[['⏱ Study minutes',w.m,g.m,'m'],['📝 Practice questions',w.q,g.q,'q'],['✅ Tasks completed',w.t,g.t,'t'],['🔥 Hard questions',w.h,g.h,'h']];
+  document.getElementById('wkBars').innerHTML=items.map(i=>{
+    const v=i[1],G=i[2],pct=Math.min(100,Math.round(v/G*100));let st;
+    if(v>=G)st='🎉 Goal met!';
+    else if(past)st='Missed by '+(G-v);
+    else if(elapsed===0)st='Not started';
+    else if(v/G>=elapsed/7-0.05)st='👍 On track, '+(G-v)+' to go';
+    else st='⚠ Behind, '+(G-v)+' to go';
+    return `<div style="margin:8px 0"><div class="top"><span>${i[0]}</span><span class="muted"><b style="color:var(--text)">${v}</b> / ${G} · ${st}</span></div><div class="bar"><div style="width:${pct}%;${v>=G?'background:var(--acc2)':''}"></div></div></div>`}).join('');
+  const n=nHit(w);
+  document.getElementById('wkSum').textContent=n+'/4 goals met'+(n===4?' 🏆':'');
+  document.getElementById('goalIn').innerHTML=[['m','Minutes/week'],['q','Questions/week'],['t','Tasks/week'],['h','Hard questions/week']].map(x=>`<div><label>${x[1]}</label><input type="number" min="1" value="${g[x[0]]}" onchange="setGoal('${x[0]}',this.value)"></div>`).join('');
+  let rows='',full=0;
+  for(let i=0;i<=lastWeekIdx();i++){const s=addDays(wkStart(S.start),i*7),x=weekIdx(i),h=hits(x),c=h.filter(Boolean).length;if(c===4)full++;
+    rows+=`<tr style="${s===ws?'background:var(--hl)':''}"><td>Wk ${i+1}</td><td>${x.m}</td><td>${x.q}</td><td>${x.h}</td><td>${x.t}</td><td>${h.map(b=>b?'🟩':'⬜').join('')} ${c}/4</td></tr>`}
+  document.getElementById('wkHist').innerHTML='<tr><th>Week</th><th>Min</th><th>Qs</th><th>Hard</th><th>Tasks</th><th>Goals</th></tr>'+rows;
+  document.getElementById('wkAll').textContent='· perfect weeks: '+full;
+}
+const _render=render;render=function(){_render();renderWeekly()};
+tDate.value=ds(new Date());
+render();
+
+(function(){
+  function show(t){
+    document.querySelectorAll('.pane').forEach(function(e){e.classList.toggle('on',e.id==='p-'+t)});
+    document.querySelectorAll('#nav button').forEach(function(b){b.classList.toggle('on',b.dataset.t===t)});
+    try{history.replaceState(null,'','#'+t)}catch(e){}
+    window.scrollTo(0,0);
+  }
+  document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
+  var h=location.hash.slice(1);show(['track','hard','plan','res'].indexOf(h)>=0?h:'track');
+})();
+</script></body></html>
