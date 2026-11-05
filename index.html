@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SAT Prep Hub</title>
+<title>Andrea’s SAT Prep: We got this!</title>
 <style>
 :root{--bg:#f4f6f5;--card:#fff;--text:#1f2937;--muted:#6b7280;--acc:#2f7d62;--acc2:#e8a317;--line:#e3e8e6;--hl:#e8f3ee;--bad:#c2410c}
 @media (prefers-color-scheme:dark){:root{--bg:#121617;--card:#1c2224;--text:#e6ecea;--muted:#98a6a2;--acc:#6fd0ae;--acc2:#f0bd4a;--line:#2b3437;--hl:#1e2e29;--bad:#fb923c}}
@@ -57,9 +57,32 @@ a.link{display:block;border:1px solid var(--line);border-radius:10px;padding:10p
 a.link:hover{border-color:var(--acc)}
 a.link b{display:block;color:var(--acc)}a.link span{font-size:.85rem;color:var(--muted)}
 header{padding:10px 0 0}
+
+:root{--bg:#faf7fd;--card:#ffffff;--text:#2a2338;--muted:#7a7090;--acc:#7c5cbf;--acc2:#f59e6c;--line:#e8e0f3;--hl:#f2ecfb;--bad:#d9534f}
+@media (prefers-color-scheme:dark){:root{--bg:#17141f;--card:#211c2b;--text:#efeaf7;--muted:#a79fbb;--acc:#b69cff;--acc2:#ffb88a;--line:#362d47;--hl:#2a2338;--bad:#ff8a7a}
+button,nav button.on{color:#1b1426}nav button{color:var(--text)}.hero{background:linear-gradient(135deg,#4b3590,#a64d85)!important}}
+body{background:var(--bg);background-image:radial-gradient(circle at 10% 0,var(--hl),transparent 40%)}
+.card{box-shadow:0 2px 10px rgba(124,92,191,.08);border-radius:14px}
+button.ghost{color:var(--text)}
+.l1{background:#dccbf8;color:#3b2a66}.l2{background:#a78be6;color:#fff}.l3{background:#6d44c2;color:#fff}
+.stat b{color:var(--acc)}
+.bar>div{background:linear-gradient(90deg,var(--acc),#d46ea8)}
+.hero{background:linear-gradient(135deg,#7c5cbf,#e07aa8 70%,#f59e6c);color:#fff;border-radius:18px;padding:22px 20px;margin:6px 0 10px;box-shadow:0 6px 20px rgba(124,92,191,.28)}
+.hero h1{margin:2px 0 4px;font-size:2.2rem;color:#fff}
+.hero .hi{opacity:.9;font-size:1rem}
+.hero .lead{margin:0 0 12px;font-size:1.05rem;opacity:.96}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:.88rem}
+.quote{margin-top:12px;font-style:italic;opacity:.95;border-left:3px solid rgba(255,255,255,.6);padding-left:10px}
 </style></head>
 <body><main>
-<header><h1>🎓 SAT Prep Hub</h1><div class="muted">Goal: 860 → 1100+ · First test: March 6, 2027</div></header>
+<header class="hero">
+<div class="hi">Hey Andrea 👋</div>
+<h1>We got this! 💪</h1>
+<p class="lead">Just follow the plan, one day at a time, and trust the process.</p>
+<div class="chips"><span>🎯 Goal: 1100+</span><span>📅 Test day: Mar 6, 2027</span><span id="cd">⏳ …</span></div>
+<div class="quote" id="qt"></div>
+</header>
 <nav id="nav"><button data-t="track">✅ Tracker</button><button data-t="hard">🔥 Hard Concepts</button><button data-t="plan">📋 Study Plan</button><button data-t="res">🔗 Resources</button></nav>
 <section class="pane" id="p-track">
 <div class="top">
@@ -118,7 +141,7 @@ header{padding:10px 0 0}
   <table id="tTable" style="margin-top:10px"></table>
 </div>
 
-<div class="card"><h2>🗓 Study calendar (16 weeks)</h2><div class="muted">Darker = more tasks completed. Sundays are rest days.</div><div class="heat" id="heat" style="margin-top:8px"></div></div>
+<div class="card"><h2>🗓 Study calendar (18 weeks)</h2><div class="muted">Darker = more tasks completed. Sundays are rest days.</div><div class="heat" id="heat" style="margin-top:8px"></div></div>
 
 <div class="card"><h2>🏆 Achievements <span class="muted" id="bCount"></span></h2><div class="badges" id="badges"></div></div>
 </section>
@@ -130,8 +153,8 @@ header{padding:10px 0 0}
 <div class="card"><h2>📖 Reading &amp; Writing</h2><details class="qa"><summary><b>Run-ons and comma splices</b></summary><p class="muted">Two complete sentences need a period, a semicolon, or a comma plus a conjunction (FANBOYS). A comma alone is not enough.</p><p><b>Try it:</b> Fix this: 'The experiment failed, the team learned from it.'</p><details><summary>Show answer</summary><p>Use a semicolon: 'The experiment failed; the team learned from it.' A period or a comma plus 'but' also works.</p></details></details><details class="qa"><summary><b>Subject-verb agreement with interruptions</b></summary><p class="muted">Cross out any phrase between the subject and the verb. The verb agrees with the real subject.</p><p><b>Try it:</b> Choose: 'The box of old letters (is / are) in the attic.'</p><details><summary>Show answer</summary><p>'Is.' The subject is 'box,' not 'letters.'</p></details></details><details class="qa"><summary><b>Modifier placement</b></summary><p class="muted">An opening phrase must describe the noun that comes right after the comma.</p><p><b>Try it:</b> Fix this: 'Walking down the street, the trees looked beautiful.'</p><details><summary>Show answer</summary><p>The trees were not walking. Better: 'Walking down the street, she thought the trees looked beautiful.'</p></details></details><details class="qa"><summary><b>Pronouns and apostrophes</b></summary><p class="muted">Its = belongs to it. It's = it is. Whose vs who's follows the same pattern. A pronoun must clearly refer to one noun.</p><p><b>Try it:</b> Choose: 'The company changed (its / it's) policy because (its / it's) customers complained.'</p><details><summary>Show answer</summary><p>'Its policy' (possession) and 'because its customers complained' (possession).</p></details></details><details class="qa"><summary><b>Transitions</b></summary><p class="muted">Decide the relationship between the two ideas first: contrast, cause, addition, or example. Then pick the matching word.</p><p><b>Try it:</b> 'The data were incomplete. ___, the researchers published the study.' Which fits: Therefore, For example, or However?</p><details><summary>Show answer</summary><p>'However.' The second sentence goes against what you would expect after incomplete data.</p></details></details><details class="qa"><summary><b>Words in context</b></summary><p class="muted">Cover the word, predict your own word, then choose the closest option. Many words have a second meaning that the SAT likes to test.</p><p><b>Try it:</b> 'The senator's remarks were guarded.' What does 'guarded' most nearly mean?</p><details><summary>Show answer</summary><p>Cautious. It does not mean protected or watched.</p></details></details><details class="qa"><summary><b>Inference traps</b></summary><p class="muted">Wrong answers are often too extreme (always, never, all), out of scope, or true but not supported by the text.</p><p><b>Try it:</b> A passage says some bees can learn symbols. Which conclusion is best supported: all bees can read, or bees show a capacity for learning?</p><details><summary>Show answer</summary><p>'Bees show a capacity for learning.' The first claim is too extreme.</p></details></details><details class="qa"><summary><b>Command of evidence (graphs and data)</b></summary><p class="muted">Check every number in each answer choice against the graph. Wrong choices often mix up two categories or years.</p><p><b>Try it:</b> Why is it risky to choose an answer after checking only one number?</p><details><summary>Show answer</summary><p>The choice may contain a second claim that is wrong. Every part of an answer must match the data.</p></details></details><details class="qa"><summary><b>Cross-text connections</b></summary><p class="muted">Summarize each author's main claim in one phrase. Then decide whether the second author agrees, disagrees, or qualifies the first.</p><p><b>Try it:</b> What is the first step on a paired-passage question?</p><details><summary>Show answer</summary><p>Write a one-phrase summary of each author's position before reading the choices.</p></details></details><details class="qa"><summary><b>Rhetorical synthesis</b></summary><p class="muted">Reread the goal in the question. The correct answer is the one that serves that specific goal, not just a true statement from the notes.</p><p><b>Try it:</b> If the goal is 'to emphasize the project's cost,' should you choose the statement about its design or its price?</p><details><summary>Show answer</summary><p>Choose the one about its price. It must match the stated goal.</p></details></details><details class="qa"><summary><b>Concision</b></summary><p class="muted">The shortest answer that keeps the full meaning is usually right. Watch for redundancy.</p><p><b>Try it:</b> Which is better: 'past history' or 'history'?</p><details><summary>Show answer</summary><p>'History.' 'Past' repeats what the word already means.</p></details></details></div>
 </section>
 <section class="pane" id="p-plan">
-<h2 style="font-size:1.3rem;margin:0">📋 16-Week Study Plan</h2>
-<p class="sub">A 16-week, step-by-step plan for an 11th grader starting at 860. Target: 1100+ on the March 6, 2027 SAT, with a retake in May or June if needed.</p>
+<h2 style="font-size:1.3rem;margin:0">📋 18-Week Study Plan</h2>
+<p class="sub">An 18-week, step-by-step plan (starting Nov 5) for an 11th grader starting at 860. Target: 1100+ on the March 6, 2027 SAT, with a retake in May or June if needed.</p>
 
 <div class="card hl"><strong>Realistic expectations:</strong> Going from 860 to 1100+ (a gain of about 240) is achievable with steady, consistent work, but results vary. Students who review their mistakes carefully improve the most. Aim for steady progress first (1000, then 1100), not perfection.</div>
 
@@ -176,7 +199,7 @@ header{padding:10px 0 0}
 <h3>The most important habit: the error log</h3>
 <p>For every missed or guessed question, write one line: <em>topic, why it was missed (concept gap, careless mistake, ran out of time, misread), and the correct method</em>. Redo each logged question one week later. This is where most of the score improvement comes from.</p>
 
-<h2 class="sec">5. The 16-week schedule</h2>
+<h2 class="sec">5. The 18-week schedule (Week 1 starts Thu, Nov 5)</h2>
 <div class="wrap"><table>
 <tr><th>Week</th><th>Math focus</th><th>Reading &amp; Writing focus</th><th>Milestone</th></tr>
 <tr><td>1</td><td>Linear equations and inequalities</td><td>Words in context (vocabulary)</td><td><strong>Baseline:</strong> full Bluebook test, build the error log</td></tr>
@@ -194,7 +217,9 @@ header{padding:10px 0 0}
 <tr><td>13</td><td>Targeted timed sets, Desmos shortcuts</td><td>Targeted timed sets</td><td></td></tr>
 <tr><td>14</td><td>Hard-question practice, pacing</td><td>Hard-question practice, pacing</td><td></td></tr>
 <tr><td>15</td><td>Final review of the error log</td><td>Final review of the error log</td><td><strong>Final full test</strong> (target 1100+)</td></tr>
-<tr><td>16</td><td colspan="2">Light review only (30 min/day). Sleep well, prepare the laptop and ID, charge the device.</td><td><strong>Test day: Mar 6</strong></td></tr>
+<tr><td>16</td><td>Weak-spot drills, pacing</td><td>Weak-spot drills, pacing</td><td>Optional extra full test</td></tr>
+<tr><td>17</td><td colspan="2">Light review only (30 min/day). Rest well.</td><td></td></tr>
+<tr><td>18</td><td colspan="2">Light review only. Sleep well, prepare the laptop and ID, charge the device.</td><td><strong>Test day: Sat Mar 6</strong></td></tr>
 </table></div>
 <p class="sub">Take one official Bluebook practice test per checkpoint (they are limited, so don't use them up early). Use the Question Bank for everything else.</p>
 
@@ -303,7 +328,9 @@ const WEEKS=[
 ['Targeted timed sets + Desmos','Targeted timed sets',''],
 ['Hard questions & pacing','Hard questions & pacing',''],
 ['Final error-log review','Final error-log review','Final full test (target 1100+)'],
-['Light review, rest, prep','Light review, rest, prep','TEST DAY: Mar 6']];
+['Weak-spot drills + pacing','Weak-spot drills + pacing','Optional extra full test'],
+['Light review, rest, prep','Light review, rest, prep',''],
+['Light review only, sleep well','Light review only, sleep well','TEST DAY: Sat Mar 6']];
 const PLAN={
 0:['Rest day, or redo 5 old error-log questions (optional 20 min)'],
 1:['Math lesson / concept review (30 min)','Math practice questions (15 min)','Add misses to the error log'],
@@ -313,9 +340,10 @@ const PLAN={
 5:['Mixed math practice (20 min)','Mixed Reading & Writing practice (20 min)','Update the error log'],
 6:['Timed section or full Bluebook test','Review all mistakes','Log the score below (if a full test)']};
 let S=load();
+if(S.start==='2026-11-09'){S.start='2026-11-05';try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 let view=ds(new Date());
 function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x)return x}catch(e){}
-  return {start:'2026-11-09',days:{},tests:[{name:'Huntington sample',date:'2026-11-01',total:860}],seen:[]}}
+  return {start:'2026-11-05',days:{},tests:[{name:'Huntington sample',date:'2026-11-01',total:860}],seen:[]}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function ds(d){const z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())}
 function pd(s){const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)}
@@ -338,8 +366,8 @@ function stats(){
   return{tasks,mins,qs,best,streak,xp}}
 function active(s){const d=S.days[s];return d&&(d.t.some(Boolean)||d.m>0||d.q>0)}
 function perfectWeek(){
-  for(let w=0;w<16;w++){let ok=true;const st=addDays(S.start,w*7);
-    for(let i=0;i<6;i++){const s=addDays(st,i);if(pd(s).getDay()===0)continue;if(doneCount(s)<3){ok=false;break}}
+  for(let w=0;w<18;w++){let ok=true;const st=addDays(S.start,w*7);
+    for(let i=0;i<7;i++){const s=addDays(st,i);if(pd(s).getDay()===0)continue;if(doneCount(s)<3){ok=false;break}}
     if(ok&&pd(addDays(st,6))<=new Date())return true}
   return false}
 const BADGES=[
@@ -378,7 +406,7 @@ function render(){
   const W=WEEKS[wk];
   fM.textContent=W?W[0]:(n<0?'Plan starts '+S.start:'Plan complete 🎉');
   fR.textContent=W?W[1]:'–';
-  milestone.textContent=W&&W[2]?'🎯 Week '+(wk+1)+' milestone: '+W[2]:(W?'Week '+(wk+1)+' of 16':'');
+  milestone.textContent=W&&W[2]?'🎯 Week '+(wk+1)+' milestone: '+W[2]:(W?'Week '+(wk+1)+' of 18':'');
   const d=day(view);const list=PLAN[dow];
   tasks.innerHTML=list.map((t,i)=>`<label class="task ${d.t[i]?'done':''}"><input type="checkbox" ${d.t[i]?'checked':''} onchange="toggle(${i},this.checked)"><span>${t}</span></label>`).join('');
   mins.value=d.m||'';qs.value=d.q||'';hq.value=d.h||'';
@@ -392,7 +420,7 @@ function renderHeat(){
   const h=document.getElementById('heat');let html='';const today=ds(new Date());
   ['S','M','T','W','T','F','S'].forEach(x=>html+=`<div class="muted" style="text-align:center">${x}</div>`);
   const first=pd(S.start).getDay();for(let i=0;i<first;i++)html+='<div></div>';
-  for(let i=0;i<112;i++){const s=addDays(S.start,i);const c=doneCount(s);
+  for(let i=0;i<126;i++){const s=addDays(S.start,i);const c=doneCount(s);
     const cls=c>=3?'l3':c==2?'l2':(c==1||active(s))?'l1':'';
     html+=`<div class="cell ${cls} ${s===today?'today':''}" title="${s}" style="cursor:pointer" onclick="view='${s}';render();scrollTo(0,0)">${pd(s).getDate()}</div>`}
   h.innerHTML=html}
@@ -431,7 +459,7 @@ function renderChart(){
 
 // ---------- Settings ----------
 function settings(){
-  const a=prompt('Plan start date (YYYY-MM-DD). It should be a Monday.',S.start);
+  const a=prompt('Plan start date (YYYY-MM-DD). Day 1 of your plan.',S.start);
   if(a&&/^\d{4}-\d{2}-\d{2}$/.test(a)){S.start=a;save();render()}
   else if(a!==null&&a!==''){toast('Invalid date format')}
   if(confirm('Also want to reset ALL progress? (Cancel to keep it)')&&confirm('This cannot be undone. Reset everything?')){
@@ -439,12 +467,12 @@ function settings(){
 
 // ---------- Weekly goals ----------
 S.goals=S.goals||{m:360,q:120,t:15,h:30};
-function wkStart(s){const d=pd(s);return addDays(s,-((d.getDay()+6)%7))}
+function wkStart(s){return addDays(s,-(((dayNum(s))%7)+7)%7)}
 function wkStats(ws){let m=0,q=0,t=0,h=0;for(let i=0;i<7;i++){const d=S.days[addDays(ws,i)];if(d){m+=+d.m||0;q+=+d.q||0;h+=+d.h||0;t+=d.t.filter(Boolean).length}}return{m,q,t,h}}
 function hits(w){const g=S.goals;return [w.m>=g.m,w.q>=g.q,w.t>=g.t,w.h>=g.h]}
 function nHit(w){return hits(w).filter(Boolean).length}
 function weekIdx(i){return wkStats(addDays(wkStart(S.start),i*7))}
-function lastWeekIdx(){return Math.max(0,Math.min(15,Math.floor((pd(wkStart(ds(new Date())))-pd(wkStart(S.start)))/6048e5)))}
+function lastWeekIdx(){return Math.max(0,Math.min(17,Math.floor((pd(wkStart(ds(new Date())))-pd(wkStart(S.start)))/6048e5)))}
 function anyFull(){for(let i=0;i<=lastWeekIdx();i++)if(nHit(weekIdx(i))===4)return true;return false}
 function goalStreak(n){let run=0;for(let i=0;i<=lastWeekIdx();i++){run=nHit(weekIdx(i))>=3?run+1:0;if(run>=n)return true}return false}
 BADGES.push(['🎯','Goal Getter','Hit all 4 weekly goals in one week',()=>anyFull()],['🧲','Consistent','Hit 3+ weekly goals, 3 weeks in a row',()=>goalStreak(3)]);
@@ -485,5 +513,13 @@ render();
   }
   document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
   var h=location.hash.slice(1);show(['track','hard','plan','res'].indexOf(h)>=0?h:'track');
+})();
+
+(function(){
+  var q=["Small steps every day add up to big scores.","You don't have to be perfect. You just have to keep going.","Every mistake you review is a point you'll win later.","Progress, not perfection.","Consistency beats cramming. Show up today.","Hard questions are just easy questions you haven't practiced yet.","Your effort today is your score tomorrow.","One more question. Then one more.","You've got the plan. Now trust it.","Tough days build strong test-takers."];
+  var now=new Date(),doy=Math.floor((now-new Date(now.getFullYear(),0,0))/864e5);
+  document.getElementById('qt').textContent='“'+q[doy%q.length]+'”';
+  var days=Math.ceil((new Date(2027,2,6)-new Date(now.getFullYear(),now.getMonth(),now.getDate()))/864e5);
+  document.getElementById('cd').textContent=days>0?'⏳ '+days+' days to go':(days===0?'🚀 Test day is TODAY!':'🎉 Test day done. Great job!');
 })();
 </script></body></html>
