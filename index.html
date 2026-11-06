@@ -80,8 +80,36 @@ details.fold>summary{font-weight:700;font-size:1.05rem;cursor:pointer;list-style
 a.btnlink{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;padding:4px 12px;border-radius:8px;font-weight:600;margin-left:4px}
 @media (prefers-color-scheme:dark){a.btnlink{color:#1b1426}}
 nav button{font-size:.95rem}
+.hwcls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.hc{border:2px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;background:var(--card);text-align:left;color:var(--text)}
+.hc.on{border-color:var(--acc);background:var(--hl)}
+.hc b{display:block}.hc small{color:var(--muted)}
+.hc .mini{height:6px;border-radius:4px;background:var(--line);margin-top:6px;overflow:hidden}.hc .mini i{display:block;height:100%}
+.hw{display:flex;gap:10px;align-items:center;padding:8px 4px;border-bottom:1px solid var(--line)}
+.hw:last-child{border:0}.hw input{width:20px;height:20px;accent-color:var(--acc)}
+.hw.done .tx{text-decoration:line-through;color:var(--muted)}
+.hw .tx{flex:1}.tag{color:#fff;border-radius:6px;padding:1px 8px;font-size:.75rem;white-space:nowrap}
+.due{font-size:.8rem;color:var(--muted);white-space:nowrap}.due.bad{color:var(--bad);font-weight:700}.due.td{color:var(--acc2);font-weight:700}
+select{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);width:100%}
+.ckgrid{display:grid;grid-template-columns:minmax(78px,auto) repeat(7,1fr);gap:6px;align-items:center;text-align:center}
+.ckgrid .hd{font-size:.75rem;color:var(--muted);line-height:1.2}.ckgrid .hd.today{color:var(--acc);font-weight:700}
+.ckgrid .lb{text-align:left;font-size:.85rem;font-weight:600}
+.ck{width:100%;max-width:40px;aspect-ratio:1;margin:0 auto;border-radius:50%;border:2px solid var(--line);background:var(--card);color:#fff;font-size:1.1rem;font-weight:700;padding:0;cursor:pointer}
+.ck.on{background:var(--acc);border-color:var(--acc)}.ck:disabled{opacity:.35;cursor:default}
+@media (prefers-color-scheme:dark){.ck.on{color:#1b1426}}
+details.fold2>summary{font-weight:700;cursor:pointer;margin:14px 0 6px}
+#hwAlert .alertbar{background:var(--card);border:2px solid var(--bad);border-radius:14px;padding:12px 14px;margin:8px 0}
+#hwAlert .alertbar h3{margin:0 0 6px;color:var(--bad);font-size:1rem}
+#hwAlert .arow{padding:8px 0;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between}
+#hwAlert .arow:first-of-type{border-top:0}
+.pr{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.pr:last-child{border:0}
+.pr .nm{flex:1;font-weight:600}
+.pb{min-width:96px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--text);padding:8px 10px;cursor:pointer;font-weight:600}
+.pb.s1{background:var(--acc);border-color:var(--acc);color:#fff}.pb.s2{background:var(--hl);border-color:var(--acc2);color:var(--text)}
+@media (prefers-color-scheme:dark){.pb.s1{color:#1b1426}}
 </style></head>
 <body><main>
+<div id="hwAlert"></div>
 <header class="hero">
 <div class="hi">Hey Andrea 👋</div>
 <h1>We got this! 💪</h1>
@@ -89,7 +117,7 @@ nav button{font-size:.95rem}
 <div class="chips"><span>🎯 Goal: 1100+</span><span>📅 Test day: Mar 6, 2027</span><span id="cd">⏳ …</span></div>
 <div class="quote" id="qt"></div>
 </header>
-<nav id="nav"><button data-t="track">🏠 Home</button><button data-t="hard">🔥 Hard</button><button data-t="plan">📋 Plan</button><button data-t="essay">✍️ Essay</button><button data-t="res">🔗 Links</button></nav>
+<nav id="nav"><button data-t="track">🏠 Home</button><button data-t="school">📚 School</button><button data-t="hard">🔥 Hard</button><button data-t="plan">📋 Plan</button><button data-t="essay">✍️ Essay</button><button data-t="res">🔗 Links</button></nav>
 <section class="pane" id="p-track">
 <div class="top">
   <div><h2 style="font-size:1.3rem;margin:0">🎯 Daily Progress Tracker</h2><div class="muted" id="sub"></div></div>
@@ -99,6 +127,7 @@ nav button{font-size:.95rem}
 <div class="card" id="practiceNow">
   <h2>🚀 Start practicing</h2>
   <div class="pick" id="todayPick"></div>
+  <div class="pick" id="hwHome" style="margin-top:8px"></div>
   <div class="muted" style="margin:10px 0 6px"><b>Practice questions</b></div>
   <div class="links">
 <a class="link" href="https://satsuite.collegeboard.org/practice/sat-question-bank" target="_blank" rel="noopener"><b>📐 Math questions</b><span>Official Question Bank. Filter by topic and Hard.</span></a>
@@ -115,6 +144,7 @@ nav button{font-size:.95rem}
   </div>
   <div class="muted" style="margin:10px 0 6px"><b>More on this site</b></div>
   <div class="links">
+<a class="link" href="#school"><b>📚 School homework</b><span>Track homework for all 7 classes.</span></a>
 <a class="link" href="#hard"><b>🔥 Harder concepts</b><span>Tough questions with answers.</span></a>
 <a class="link" href="#plan"><b>📋 Study plan</b><span>The full 18-week schedule.</span></a>
 <a class="link" href="#essay"><b>✍️ College essay</b><span>How to get started.</span></a>
@@ -176,6 +206,47 @@ nav button{font-size:.95rem}
 <details class="card fold"><summary>🗓 Study calendar (18 weeks)</summary><div class="muted">Darker = more tasks completed. Sundays are rest days.</div><div class="heat" id="heat" style="margin-top:8px"></div></details>
 
 <details class="card fold"><summary>🏆 Achievements <span class="muted" id="bCount"></span></summary><div class="badges" id="badges" style="margin-top:10px"></div></details>
+</section>
+<section class="pane" id="p-school">
+<h2 style="font-size:1.3rem;margin:0 0 6px">📚 School Homework</h2>
+<p class="muted">Add each assignment, tick it off when it's done, and watch the progress for every class.</p>
+<div class="card" id="pdCard">
+  <div class="top"><h2 style="margin:0" id="pdTitle"></h2><div><button class="ghost" onclick="pDay(-1)">◀</button> <button class="ghost" onclick="pDay(0)">Today</button> <button class="ghost" onclick="pDay(1)">▶</button></div></div>
+  <div class="muted" id="pdMode" style="margin:6px 0"></div>
+  <div class="bar" style="margin:6px 0 10px"><div id="pdBar" style="width:0"></div></div>
+  <div id="pdRows"></div>
+  <div class="muted" style="margin-top:8px">Tap once for ✓ done, twice for – (no homework or class today), three times to clear. At midnight, any unchecked periods show up as an alert at the top of the page.</div>
+</div>
+<details class="fold2"><summary>📝 Assignment list (optional): add specific homework with due dates</summary>
+<div class="card" id="hwSumCard">
+  <div class="top"><h2 style="margin:0">Today</h2><span class="muted" id="hwSumTxt"></span></div>
+  <div class="bar" style="margin:8px 0"><div id="hwBar" style="width:0"></div></div>
+  <div class="stats">
+    <div class="stat"><b id="hwDue">0</b>due today</div>
+    <div class="stat"><b id="hwOver" >0</b>overdue</div>
+    <div class="stat"><b id="hwWeek">0</b>done this week</div>
+    <div class="stat"><b id="hwOnTime">–</b>on-time rate</div>
+  </div>
+</div>
+<div class="card">
+  <h2>➕ Add an assignment</h2>
+  <div class="row">
+    <div style="flex:1 1 150px"><label>Class</label><select id="hwCls"></select></div>
+    <div style="flex:3 1 200px"><label>What is it?</label><input type="text" id="hwText" placeholder="e.g. Chapter 5 problems 1-20"></div>
+    <div><label>Due</label><input type="date" id="hwDueIn"></div>
+    <div><label>Type</label><select id="hwType"><option>Homework</option><option>Quiz</option><option>Test</option><option>Project</option><option>Reading</option></select></div>
+    <div style="flex:0"><button id="hwAdd">Add</button></div>
+  </div>
+</div>
+<div class="card"><h2>🎒 My classes <span class="muted" style="font-weight:400;font-size:.8rem">(tap a class to filter)</span></h2><div class="hwcls" id="hwClasses"></div></div>
+<div id="hwLists"></div>
+</details>
+<div class="card"><h2>🔗 Study help</h2><div class="links">
+<a class="link" href="https://www.khanacademy.org/math/ap-calculus-ab" target="_blank" rel="noopener"><b>AP Calculus AB</b><span>Khan Academy lessons and practice</span></a>
+<a class="link" href="https://www.khanacademy.org/humanities/us-history" target="_blank" rel="noopener"><b>US History</b><span>Khan Academy US history</span></a>
+<a class="link" href="https://www.khanacademy.org/science/biology" target="_blank" rel="noopener"><b>Biology / Biotech</b><span>Khan Academy biology</span></a>
+<a class="link" href="https://owl.purdue.edu" target="_blank" rel="noopener"><b>English writing help</b><span>Purdue OWL</span></a>
+</div></div>
 </section>
 <section class="pane" id="p-hard">
 <h2 style="font-size:1.3rem;margin:0 0 6px">🔥 Harder Concepts</h2>
@@ -559,7 +630,7 @@ render();
     window.scrollTo(0,0);
   }
   document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
-  var T=['track','hard','plan','essay','res'];var h=location.hash.slice(1);show(T.indexOf(h)>=0?h:'track');
+  var T=['track','school','hard','plan','essay','res'];var h=location.hash.slice(1);show(T.indexOf(h)>=0?h:'track');
   window.addEventListener('hashchange',function(){var x=location.hash.slice(1);if(T.indexOf(x)>=0)show(x)});
 })();
 
@@ -586,4 +657,97 @@ render();
   else{txt='Today is a READING &amp; WRITING day. Do your tasks below, then practice questions.';url=QB;lab='Open R&amp;W questions';}
   el.innerHTML='<b>⭐ Today:</b> '+txt+(url?' <a class="btnlink" href="'+url+'" target="_blank" rel="noopener">'+lab+' →</a>':'');
 })();
+
+(function(){
+  var HK='sat-school-v1';
+  var CL=[['Forensics','🔍','#7c5cbf'],['Intro to Marketing','📢','#d4649b'],['US History 11','🇺🇸','#4a7fd4'],['English 11','📚','#d9822b'],['AP Calc AB','➗','#2a9484'],['Adv Biotech','🧬','#4f9a3c'],['Ceramics','🏺','#b5683f']];
+  var H=null;try{H=JSON.parse(localStorage.getItem(HK))}catch(e){}
+  if(!H||!H.items)H={items:[],nid:1};
+  var filter=-1;
+  function sv(){try{localStorage.setItem(HK,JSON.stringify(H))}catch(e){}}
+  function $(i){return document.getElementById(i)}
+  function td(){return ds(new Date())}
+  function lbl(due){var t=td(),n=Math.round((pd(due)-pd(t))/864e5);
+    if(n===0)return['Today','td'];if(n===1)return['Tomorrow',''];if(n===-1)return['Yesterday (overdue)','bad'];
+    if(n<0)return[(-n)+' days overdue','bad'];
+    if(n<7)return[pd(due).toLocaleDateString(undefined,{weekday:'short'}),''];
+    return[pd(due).toLocaleDateString(undefined,{month:'short',day:'numeric'}),'']}
+  function row(it){var c=CL[it.c],l=lbl(it.due);
+    return '<div class="hw '+(it.done?'done':'')+'"><input type="checkbox" '+(it.done?'checked':'')+' onchange="hwTog('+it.id+',this.checked)"><span class="tag" style="background:'+c[2]+'">'+c[1]+' '+esc(c[0])+'</span><span class="tx">'+esc(it.t)+(it.type!=='Homework'?' <span class="muted">('+it.type+')</span>':'')+'</span><span class="due '+(it.done?'':l[1])+'">'+(it.done?'✓ '+(it.doneOn||''):l[0])+'</span><button class="x" title="Delete" onclick="hwDel('+it.id+')">✕</button></div>'}
+  function sect(title,arr,open){if(!arr.length)return'';
+    return '<details class="card fold" '+(open?'open':'')+'><summary>'+title+' ('+arr.length+')</summary>'+arr.map(row).join('')+'</details>'}
+  function render(){
+    var t=td(),all=H.items,vis=all.filter(function(i){return filter<0||i.c===filter});
+    var pend=vis.filter(function(i){return !i.done}).sort(function(a,b){return a.due<b.due?-1:a.due>b.due?1:0});
+    var over=pend.filter(function(i){return i.due<t}),tod=pend.filter(function(i){return i.due===t});
+    var wk=addDays(t,7),soon=pend.filter(function(i){return i.due>t&&i.due<=wk}),later=pend.filter(function(i){return i.due>wk});
+    var done=vis.filter(function(i){return i.done}).sort(function(a,b){return a.doneOn<b.doneOn?1:-1}).slice(0,20);
+    // summary (all classes)
+    var dueT=all.filter(function(i){return i.due===t}),dueTd=dueT.filter(function(i){return i.done}).length;
+    var overAll=all.filter(function(i){return !i.done&&i.due<t}).length;
+    var wk0=addDays(t,-6),wkDone=all.filter(function(i){return i.done&&i.doneOn>=wk0}).length;
+    var doneAll=all.filter(function(i){return i.done&&i.doneOn}),ontime=doneAll.filter(function(i){return i.doneOn<=i.due}).length;
+    $('hwDue').textContent=dueT.length;$('hwOver').textContent=overAll;$('hwWeek').textContent=wkDone;
+    $('hwOnTime').textContent=doneAll.length?Math.round(ontime/doneAll.length*100)+'%':'–';
+    $('hwBar').style.width=(dueT.length?dueTd/dueT.length*100:0)+'%';
+    $('hwSumTxt').textContent=dueT.length?(dueTd+' of '+dueT.length+' done'+(dueTd===dueT.length?' 🎉':'')):'Nothing due today';
+    $('hwHome').innerHTML='📚 <b>Homework:</b> '+(dueT.length?(dueTd+' of '+dueT.length+' due today done'):'nothing due today')+(overAll?' · <span style="color:var(--bad)"><b>'+overAll+' overdue</b></span>':'')+' <a class="btnlink" href="#school">Open School →</a>';
+    // classes
+    $('hwClasses').innerHTML=CL.map(function(c,i){
+      var mine=all.filter(function(x){return x.c===i}),d=mine.filter(function(x){return x.done}).length,p=mine.length-d,o=mine.filter(function(x){return !x.done&&x.due<t}).length;
+      var pc=mine.length?Math.round(d/mine.length*100):0;
+      return '<button class="hc '+(filter===i?'on':'')+'" onclick="hwFilter('+i+')"><b>'+c[1]+' '+c[0]+'</b><small>'+p+' to do'+(o?' · <span style="color:var(--bad)">'+o+' overdue</span>':'')+' · '+d+' done</small><div class="mini"><i style="width:'+pc+'%;background:'+c[2]+'"></i></div></button>'}).join('')
+      +(filter>=0?'<button class="hc" onclick="hwFilter(-1)"><b>✖ Show all classes</b></button>':'');
+    var h=sect('⚠ Overdue',over,true)+sect('📌 Due today',tod,true)+sect('📆 Next 7 days',soon,true)+sect('🗓 Later',later,false)+sect('✅ Recently completed',done,false);
+    $('hwLists').innerHTML=h||'<div class="card hl">Nothing here yet. Add an assignment above to get started. 🎒</div>';
+  }
+  window.hwFilter=function(i){filter=(filter===i?-1:i);render()};
+  window.hwTog=function(id,v){var it=H.items.filter(function(x){return x.id===id})[0];if(!it)return;it.done=v;it.doneOn=v?td():'';sv();render();
+    if(v){var dt=H.items.filter(function(x){return x.due===td()});if(dt.length&&dt.every(function(x){return x.done}))toast('🎉 All of today\'s homework is done!');}};
+  window.hwDel=function(id){if(confirm('Delete this assignment?')){H.items=H.items.filter(function(x){return x.id!==id});sv();render()}};
+  function add(){var tx=$('hwText').value.trim();if(!tx){toast('Type what the assignment is');return}
+    H.items.push({id:H.nid++,c:+$('hwCls').value,t:tx,due:$('hwDueIn').value||td(),type:$('hwType').value,done:false,doneOn:''});
+    $('hwText').value='';sv();render();$('hwText').focus()}
+  $('hwCls').innerHTML=CL.map(function(c,i){return '<option value="'+i+'">'+c[1]+' '+c[0]+'</option>'}).join('');
+  $('hwDueIn').value=td();
+  $('hwAdd').addEventListener('click',add);
+  $('hwText').addEventListener('keydown',function(e){if(e.key==='Enter')add()});
+  // ---------- Daily period check + midnight alert ----------
+  H.chk=H.chk||{};H.ack=H.ack||{};if(!H.since){H.since=td();sv()}
+  var cd=td(),lastT=td();
+  function wkend(d){var g=pd(d).getDay();return g===0||g===6}
+  function pst(d,i){var x=H.chk[d];return x&&x[i]?x[i]:0}
+  function miss(d){var m=[];for(var i=0;i<CL.length;i++)if(!pst(d,i))m.push(i);return m}
+  function dl(d){return pd(d).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}
+  function pRender(){
+    var t=td();if(t!==lastT){if(cd===lastT)cd=t;lastT=t}
+    var we=wkend(cd),done=CL.length-miss(cd).length;
+    $('pdTitle').textContent=(cd===t?'Today: ':'')+dl(cd);
+    $('pdMode').innerHTML=we?'📖 <b>Weekend revision:</b> check each class once you have revised it.':'✏️ <b>Homework check:</b> check each class once the homework is done.';
+    $('pdBar').style.width=(done/CL.length*100)+'%';
+    $('pdRows').innerHTML=CL.map(function(c,i){var v=pst(cd,i);
+      var tx=v===1?(we?'✓ Revised':'✓ Done'):v===2?'– None today':(we?'☐ Revise':'☐ Not yet');
+      return '<div class="pr"><span class="tag" style="background:'+c[2]+'">'+c[1]+'</span><span class="nm">'+esc(c[0])+'</span><button class="pb s'+v+'" '+(cd>t?'disabled':'')+' onclick="pTog('+i+')">'+tx+'</button></div>'}).join('');
+    // alerts: past days since feature start, not acknowledged, with missing periods
+    var out='',n=0,first=H.since>addDays(t,-14)?H.since:addDays(t,-14);
+    for(var d=addDays(t,-1);d>=first;d=addDays(d,-1)){
+      var m=miss(d);if(!m.length||H.ack[d])continue;n++;
+      out+='<div class="arow"><div><b>'+dl(d)+'</b> ('+(wkend(d)?'revision':'homework')+') missing: '+m.map(function(i){return CL[i][1]+' '+esc(CL[i][0])}).join(', ')+'</div><div><button class="ghost" onclick="pOpen(\''+d+'\')">Check now</button> <button onclick="pAck(\''+d+'\')">✓ Acknowledge</button></div></div>'}
+    $('hwAlert').innerHTML=n?'<div class="alertbar"><div class="top"><h3>⚠ '+n+' day'+(n>1?'s':'')+' with unchecked periods</h3>'+(n>1?'<button class="ghost" onclick="pAckAll()">Acknowledge all</button>':'')+'</div>'+out+'</div>':'';
+    var tm=miss(t).length;
+    $('hwHome').innerHTML='✅ <b>Today\'s class check:</b> '+(CL.length-tm)+' of '+CL.length+' periods'+(n?' · <span style="color:var(--bad)"><b>'+n+' alert'+(n>1?'s':'')+'</b></span>':'')+' <a class="btnlink" href="#school">Open School →</a>';
+  }
+  window.pTog=function(i){if(cd>td())return;var x=H.chk[cd]||(H.chk[cd]={});x[i]=((x[i]||0)+1)%3;sv();pRender();
+    if(x[i]===1&&!miss(cd).length)toast('🎉 All periods checked for '+dl(cd)+'!')};
+  window.pDay=function(n){cd=n===0?td():addDays(cd,n);if(cd>td())cd=td();pRender()};
+  window.pOpen=function(d){cd=d;pRender();location.hash='school';window.scrollTo(0,0)};
+  window.pAck=function(d){H.ack[d]=1;sv();pRender()};
+  window.pAckAll=function(){var t=td();for(var d=addDays(t,-1);d>=addDays(t,-14);d=addDays(d,-1))if(miss(d).length)H.ack[d]=1;sv();pRender()};
+  var _render=render;render=function(){_render();pRender()};
+  setInterval(pRender,30000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)pRender()});
+
+  render();
+})();
+
 </script></body></html>
