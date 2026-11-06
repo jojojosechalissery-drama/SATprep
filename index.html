@@ -107,6 +107,10 @@ details.fold2>summary{font-weight:700;cursor:pointer;margin:14px 0 6px}
 .pb{min-width:96px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--text);padding:8px 10px;cursor:pointer;font-weight:600}
 .pb.s1{background:var(--acc);border-color:var(--acc);color:#fff}.pb.s2{background:var(--hl);border-color:var(--acc2);color:var(--text)}
 @media (prefers-color-scheme:dark){.pb.s1{color:#1b1426}}
+.nextbox{background:var(--hl);border:2px solid var(--acc);border-radius:12px;padding:12px;margin:8px 0;text-align:center}
+.nextbox .big{display:block;font-size:1.7rem;font-weight:800;color:var(--acc);font-variant-numeric:tabular-nums;margin-top:4px}
+.nextbox .big.td{color:var(--acc2)}.nextbox .big.bad{color:var(--bad)}
+.cdn{font-variant-numeric:tabular-nums}
 </style></head>
 <body><main>
 <div id="hwAlert"></div>
@@ -216,6 +220,29 @@ details.fold2>summary{font-weight:700;cursor:pointer;margin:14px 0 6px}
   <div class="bar" style="margin:6px 0 10px"><div id="pdBar" style="width:0"></div></div>
   <div id="pdRows"></div>
   <div class="muted" style="margin-top:8px">Tap once for ✓ done, twice for – (no homework or class today), three times to clear. At midnight, any unchecked periods show up as an alert at the top of the page.</div>
+</div>
+<div class="card" id="ttCard">
+  <h2>📅 Upcoming tests</h2>
+  <div id="ttNext"></div>
+  <div class="row">
+    <div style="flex:1 1 150px"><label>Class</label><select id="ttCls"></select></div>
+    <div style="flex:2 1 160px"><label>Test / topics</label><input type="text" id="ttName" placeholder="e.g. Unit 3 test: derivatives"></div>
+    <div><label>Date</label><input type="date" id="ttDate"></div>
+    <div><label>Time (optional)</label><input type="time" id="ttTime"></div>
+    <div style="flex:0"><button id="ttAdd">Add</button></div>
+  </div>
+  <div id="ttList" style="margin-top:8px"></div>
+  <details style="margin-top:6px"><summary class="muted">Past tests</summary><div id="ttPast"></div></details>
+</div>
+<div class="card" id="ntCard">
+  <h2>🗒 Notes &amp; reminders</h2>
+  <div class="row">
+    <div style="flex:1 1 150px"><label>For</label><select id="ntCls"></select></div>
+    <div style="flex:3 1 200px"><label>Note or reminder</label><input type="text" id="ntText" placeholder="e.g. Bring calculator, project due Friday"></div>
+    <div><label>Remind me on (optional)</label><input type="date" id="ntDate"></div>
+    <div style="flex:0"><button id="ntAdd">Add</button></div>
+  </div>
+  <div id="ntList" style="margin-top:8px"></div>
 </div>
 <details class="fold2"><summary>📝 Assignment list (optional): add specific homework with due dates</summary>
 <div class="card" id="hwSumCard">
@@ -733,7 +760,7 @@ render();
     for(var d=addDays(t,-1);d>=first;d=addDays(d,-1)){
       var m=miss(d);if(!m.length||H.ack[d])continue;n++;
       out+='<div class="arow"><div><b>'+dl(d)+'</b> ('+(wkend(d)?'revision':'homework')+') missing: '+m.map(function(i){return CL[i][1]+' '+esc(CL[i][0])}).join(', ')+'</div><div><button class="ghost" onclick="pOpen(\''+d+'\')">Check now</button> <button onclick="pAck(\''+d+'\')">✓ Acknowledge</button></div></div>'}
-    $('hwAlert').innerHTML=n?'<div class="alertbar"><div class="top"><h3>⚠ '+n+' day'+(n>1?'s':'')+' with unchecked periods</h3>'+(n>1?'<button class="ghost" onclick="pAckAll()">Acknowledge all</button>':'')+'</div>'+out+'</div>':'';
+    $('hwAlert').innerHTML=soonHtml()+(n?'<div class="alertbar"><div class="top"><h3>⚠ '+n+' day'+(n>1?'s':'')+' with unchecked periods</h3>'+(n>1?'<button class="ghost" onclick="pAckAll()">Acknowledge all</button>':'')+'</div>'+out+'</div>':'');
     var tm=miss(t).length;
     $('hwHome').innerHTML='✅ <b>Today\'s class check:</b> '+(CL.length-tm)+' of '+CL.length+' periods'+(n?' · <span style="color:var(--bad)"><b>'+n+' alert'+(n>1?'s':'')+'</b></span>':'')+' <a class="btnlink" href="#school">Open School →</a>';
   }
@@ -743,9 +770,48 @@ render();
   window.pOpen=function(d){cd=d;pRender();location.hash='school';window.scrollTo(0,0)};
   window.pAck=function(d){H.ack[d]=1;sv();pRender()};
   window.pAckAll=function(){var t=td();for(var d=addDays(t,-1);d>=addDays(t,-14);d=addDays(d,-1))if(miss(d).length)H.ack[d]=1;sv();pRender()};
-  var _render=render;render=function(){_render();pRender()};
-  setInterval(pRender,30000);
-  document.addEventListener('visibilitychange',function(){if(!document.hidden)pRender()});
+
+  // ---------- Tests, notes, countdown ----------
+  H.tests=H.tests||[];H.notes=H.notes||[];if(!H.nid2)H.nid2=1;
+  function tts(t){return new Date(t.date+'T'+(t.time||'08:00')).getTime()}
+  function cdf(ms){var s=Math.floor(ms/1000),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),x=s%60,p=function(n){return String(n).padStart(2,'0')};return (d?d+'d ':'')+p(h)+'h '+p(m)+'m '+p(x)+'s'}
+  function urg(ms){return ms<=864e5?'bad':ms<=3*864e5?'td':''}
+  function tick(){document.querySelectorAll('.cdn').forEach(function(el){var ms=+el.dataset.t-Date.now();
+    el.textContent=ms<=0?'happening now':cdf(ms);el.classList.remove('bad','td');var u=urg(ms);if(u)el.classList.add(u)})}
+  function trow(t,past){var c=CL[t.c],ts=tts(t);
+    return '<div class="hw"><span class="tag" style="background:'+c[2]+'">'+c[1]+' '+esc(c[0])+'</span><span class="tx"><b>'+esc(t.name)+'</b><br><span class="muted">'+pd(t.date).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})+(t.time?' at '+t.time:' (morning)')+'</span></span>'+(past?'':'<span class="due cdn" data-t="'+ts+'"></span>')+'<button class="x" title="Delete" onclick="tDel('+t.id+')">✕</button></div>'}
+  function soonHtml(){var now=Date.now(),h='',tt=H.tests.filter(function(t){var ms=tts(t)-now;return ms>-36e5&&ms<=3*864e5}).sort(function(a,b){return tts(a)-tts(b)});
+    tt.forEach(function(t){h+='<div class="arow"><div>📅 <b>'+esc(CL[t.c][0])+' test</b>: '+esc(t.name)+' in <b class="cdn" data-t="'+tts(t)+'"></b></div><div><a class="btnlink" href="#school">Open</a></div></div>'});
+    H.notes.filter(function(n){return !n.done&&n.due&&n.due<=td()}).forEach(function(n){h+='<div class="arow"><div>🔔 <b>Reminder</b>'+(n.c>=0?' ('+esc(CL[n.c][0])+')':'')+': '+esc(n.t)+'</div><div><button onclick="nTog('+n.id+',true)">✓ Done</button></div></div>'});
+    return h?'<div class="alertbar" style="border-color:var(--acc2)"><h3 style="color:var(--acc2)">🔔 Coming up</h3>'+h+'</div>':''}
+  function tRender(){
+    var now=Date.now(),up=H.tests.filter(function(t){return tts(t)+72e5>=now}).sort(function(a,b){return tts(a)-tts(b)});
+    var past=H.tests.filter(function(t){return tts(t)+72e5<now}).sort(function(a,b){return tts(b)-tts(a)});
+    var nx=up[0];
+    $('ttNext').innerHTML=nx?'<div class="nextbox">⏳ Next test: <b>'+CL[nx.c][1]+' '+esc(CL[nx.c][0])+'</b>: '+esc(nx.name)+'<span class="big cdn" data-t="'+tts(nx)+'"></span></div>':'<div class="muted" style="margin:6px 0">No upcoming tests yet. Add one below.</div>';
+    $('ttList').innerHTML=up.map(function(t){return trow(t,false)}).join('');
+    $('ttPast').innerHTML=past.map(function(t){return trow(t,true)}).join('')||'<div class="muted">None</div>';
+    if(nx)$('hwHome').innerHTML+='<br>⏳ <b>Next test:</b> '+esc(CL[nx.c][0])+' in <b class="cdn" data-t="'+tts(nx)+'"></b>';
+    var nn=H.notes.slice().sort(function(a,b){return (a.done-b.done)||((a.due||'9')<(b.due||'9')?-1:1)});
+    $('ntList').innerHTML=nn.map(function(n){var l=n.due?lbl(n.due):['',''];
+      return '<div class="hw '+(n.done?'done':'')+'"><input type="checkbox" '+(n.done?'checked':'')+' onchange="nTog('+n.id+',this.checked)"><span class="tag" style="background:'+(n.c>=0?CL[n.c][2]:'#6b7280')+'">'+(n.c>=0?CL[n.c][1]+' '+esc(CL[n.c][0]):'📌 General')+'</span><span class="tx">'+esc(n.t)+'</span>'+(n.due?'<span class="due '+(n.done?'':l[1])+'">🔔 '+l[0]+'</span>':'')+'<button class="x" title="Delete" onclick="nDel('+n.id+')">✕</button></div>'}).join('')||'<div class="muted">No notes yet.</div>';
+  }
+  window.tDel=function(id){if(confirm('Delete this test?')){H.tests=H.tests.filter(function(x){return x.id!==id});sv();pRender();tRender();tick()}};
+  window.nTog=function(id,v){var n=H.notes.filter(function(x){return x.id===id})[0];if(n){n.done=v;sv();pRender();tRender();tick()}};
+  window.nDel=function(id){H.notes=H.notes.filter(function(x){return x.id!==id});sv();pRender();tRender();tick()};
+  $('ttCls').innerHTML=CL.map(function(c,i){return '<option value="'+i+'">'+c[1]+' '+c[0]+'</option>'}).join('');
+  $('ntCls').innerHTML='<option value="-1">📌 General</option>'+CL.map(function(c,i){return '<option value="'+i+'">'+c[1]+' '+c[0]+'</option>'}).join('');
+  $('ttAdd').addEventListener('click',function(){var n=$('ttName').value.trim(),d=$('ttDate').value;
+    if(!n||!d){toast('Enter the test name and date');return}
+    H.tests.push({id:H.nid2++,c:+$('ttCls').value,name:n,date:d,time:$('ttTime').value});sv();
+    $('ttName').value='';$('ttTime').value='';pRender();tRender();tick();toast('📅 Test added. Countdown started!')});
+  function addNote(){var x=$('ntText').value.trim();if(!x){toast('Type a note first');return}
+    H.notes.push({id:H.nid2++,c:+$('ntCls').value,t:x,due:$('ntDate').value,done:false});sv();$('ntText').value='';$('ntDate').value='';pRender();tRender();tick()}
+  $('ntAdd').addEventListener('click',addNote);
+  $('ntText').addEventListener('keydown',function(e){if(e.key==='Enter')addNote()});
+  var _render=render;render=function(){_render();pRender();tRender();tick()};
+  setInterval(function(){pRender();tRender();tick()},30000);setInterval(tick,1000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden){pRender();tRender();tick()}});
 
   render();
 })();
