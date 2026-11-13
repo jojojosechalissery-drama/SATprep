@@ -111,6 +111,14 @@ details.fold2>summary{font-weight:700;cursor:pointer;margin:14px 0 6px}
 .nextbox .big{display:block;font-size:1.7rem;font-weight:800;color:var(--acc);font-variant-numeric:tabular-nums;margin-top:4px}
 .nextbox .big.td{color:var(--acc2)}.nextbox .big.bad{color:var(--bad)}
 .cdn{font-variant-numeric:tabular-nums}
+.vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.vgrid .vf2{grid-column:1/-1}
+@media(max-width:620px){.vgrid{grid-template-columns:1fr}}
+.gr{display:flex;gap:12px;align-items:center}.gr label{display:flex;gap:4px;align-items:center;font-size:.9rem;color:var(--text)}.gr input{width:auto}
+textarea{font:inherit}
+pre.code{background:var(--hl);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:.78rem;max-height:300px;line-height:1.4}
+.ve{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0}
+.ve .top b{font-size:1rem}.ve small{color:var(--muted)}
+.st{font-size:.75rem;border-radius:6px;padding:1px 8px}.st.ok{background:var(--hl);color:var(--acc)}.st.no{background:#ffe9d6;color:#9a3d00}
 </style></head>
 <body><main>
 <div id="hwAlert"></div>
@@ -121,7 +129,7 @@ details.fold2>summary{font-weight:700;cursor:pointer;margin:14px 0 6px}
 <div class="chips"><span>🎯 Goal: 1100+</span><span>📅 Test day: Mar 6, 2027</span><span id="cd">⏳ …</span></div>
 <div class="quote" id="qt"></div>
 </header>
-<nav id="nav"><button data-t="track">🏠 Home</button><button data-t="school">📚 School</button><button data-t="hard">🔥 Hard</button><button data-t="plan">📋 Plan</button><button data-t="essay">✍️ Essay</button><button data-t="res">🔗 Links</button></nav>
+<nav id="nav"><button data-t="track">🏠 Home</button><button data-t="school">📚 School</button><button data-t="hard">🔥 Hard</button><button data-t="plan">📋 Plan</button><button data-t="essay">✍️ Essay</button><button data-t="vol">🤝 Volunteer</button><button data-t="res">🔗 Links</button></nav>
 <section class="pane" id="p-track">
 <div class="top">
   <div><h2 style="font-size:1.3rem;margin:0">🎯 Daily Progress Tracker</h2><div class="muted" id="sub"></div></div>
@@ -149,6 +157,7 @@ details.fold2>summary{font-weight:700;cursor:pointer;margin:14px 0 6px}
   <div class="muted" style="margin:10px 0 6px"><b>More on this site</b></div>
   <div class="links">
 <a class="link" href="#school"><b>📚 School homework</b><span>Track homework for all 7 classes.</span></a>
+<a class="link" href="#vol"><b>🤝 Volunteer record</b><span>Log activities to a Google Sheet.</span></a>
 <a class="link" href="#hard"><b>🔥 Harder concepts</b><span>Tough questions with answers.</span></a>
 <a class="link" href="#plan"><b>📋 Study plan</b><span>The full 18-week schedule.</span></a>
 <a class="link" href="#essay"><b>✍️ College essay</b><span>How to get started.</span></a>
@@ -417,6 +426,104 @@ details.fold2>summary{font-weight:700;cursor:pointer;margin:14px 0 6px}
 <div class="card"><h2>🔗 Helpful links</h2><div class="links"><a class="link" href="https://www.commonapp.org/apply/essay-prompts" target="_blank" rel="noopener"><b>Common App essay prompts</b><span>Official prompts and word limits. Check again when her application year opens.</span></a><a class="link" href="https://www.commonapp.org" target="_blank" rel="noopener"><b>Common App</b><span>Create an account, see colleges that use it, and learn the application steps.</span></a><a class="link" href="https://www.khanacademy.org/college-careers-more/college-admissions" target="_blank" rel="noopener"><b>Khan Academy: College admissions</b><span>Free videos on writing a personal statement and applying.</span></a><a class="link" href="https://owl.purdue.edu" target="_blank" rel="noopener"><b>Purdue OWL</b><span>Writing help: structure, grammar, and revision tips.</span></a></div>
 <p class="muted" style="margin-top:10px">For examples, search "[college name] essays that worked." Many colleges publish real student essays with comments from admissions staff.</p></div>
 </section>
+<section class="pane" id="p-vol">
+<h2 style="font-size:1.3rem;margin:0 0 6px">🤝 Volunteer &amp; Leadership Record</h2>
+<p class="muted">Keep one clear record of everything Andrea does, so college applications are easy later. Each entry is saved here and sent to a Google Sheet in your Google Drive.</p>
+<div class="card hl"><b>Why this matters:</b> Students often volunteer for years but forget the dates, hours and responsibilities when applying. The Common App lets her list up to <b>10 activities</b>, so we record details as they happen.</div>
+
+<details class="card fold" id="voSetup">
+  <summary>⚙ One-time setup: connect your Google Sheet</summary>
+  <p class="muted">The website can't write to Google Sheets on its own, so you add a small free Google script to your sheet. It takes about 5 minutes.</p>
+  <ol>
+    <li>In Google Drive, create a new <b>Google Sheet</b> named "Andrea Volunteer Record".</li>
+    <li>In the sheet, click <b>Extensions → Apps Script</b>.</li>
+    <li>Delete the sample code, paste the code below, and change the secret word on the first line (any word you like).</li>
+    <li>Click <b>Deploy → New deployment</b>. Choose type <b>Web app</b>. Set "Execute as" to <b>Me</b> and "Who has access" to <b>Anyone</b>. Click Deploy and approve the permissions.</li>
+    <li>Copy the <b>Web app URL</b> and paste it below along with your secret word. Then click Save.</li>
+  </ol>
+  <div style="position:relative"><button class="ghost" style="position:absolute;right:6px;top:6px" onclick="voCopy()">Copy code</button><pre id="voCode" class="code">// Google Apps Script: paste this into Extensions &gt; Apps Script (in your Google Sheet)
+var SECRET = &#x27;change-this-to-your-own-secret-word&#x27;;
+var HEADERS = [&#x27;Logged on&#x27;,&#x27;Organization&#x27;,&#x27;Activity&#x27;,&#x27;Position&#x27;,&#x27;Category&#x27;,&#x27;Start date&#x27;,&#x27;End date&#x27;,&#x27;Hours&#x27;,&#x27;Total hours so far&#x27;,&#x27;Grades (9-12)&#x27;,&#x27;Responsibilities&#x27;,&#x27;Impact&#x27;,&#x27;Supervisor&#x27;,&#x27;Supervisor contact&#x27;,&#x27;Short description (150 chars)&#x27;,&#x27;Documents saved&#x27;,&#x27;Drive folder link&#x27;,&#x27;Notes&#x27;];
+
+function doPost(e) {
+  try {
+    var d = JSON.parse(e.postData.contents);
+    if (d.key !== SECRET) return ContentService.createTextOutput(&#x27;denied&#x27;);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sh = ss.getSheetByName(&#x27;Volunteer Log&#x27;) || ss.insertSheet(&#x27;Volunteer Log&#x27;);
+    if (sh.getLastRow() === 0) {
+      sh.appendRow(HEADERS);
+      sh.setFrozenRows(1);
+      sh.getRange(1, 1, 1, HEADERS.length).setFontWeight(&#x27;bold&#x27;);
+    }
+    sh.appendRow([new Date(), d.org, d.activity, d.position, d.category, d.start, d.end,
+      d.hours, d.total, d.grades, d.resp, d.impact, d.sup, d.contact, d.desc, d.docs, d.folder, d.notes]);
+    return ContentService.createTextOutput(&#x27;ok&#x27;);
+  } catch (err) {
+    return ContentService.createTextOutput(&#x27;error: &#x27; + err);
+  }
+}
+</pre></div>
+  <div class="row" style="margin-top:10px">
+    <div style="flex:3 1 220px"><label>Web app URL</label><input type="text" id="voUrl" placeholder="https://script.google.com/macros/s/…/exec"></div>
+    <div style="flex:1 1 140px"><label>Secret word</label><input type="text" id="voKey"></div>
+    <div style="flex:3 1 220px"><label>Link to your Google Sheet (to open it from here)</label><input type="text" id="voSheet" placeholder="https://docs.google.com/spreadsheets/d/…"></div>
+    <div style="flex:0"><button onclick="voSaveCfg()">Save</button></div>
+  </div>
+  <div class="muted" id="voCfgMsg" style="margin-top:6px"></div>
+  <p class="muted">Tip: after you add the first entry, check that it appears in the "Volunteer Log" tab of your sheet. If the script is changed later, click Deploy → Manage deployments → edit → new version.</p>
+</details>
+
+<div class="card">
+  <h2>➕ Add an activity</h2>
+  <div class="vgrid">
+    <div class="vf2"><label>Organization <span class="muted" id="cOrg">0/100</span></label><input type="text" id="voOrg" maxlength="100" placeholder="e.g. Nrityalaya School of Dance"></div>
+    <div class="vf2"><label>Activity</label><input type="text" id="voAct" placeholder="e.g. Junior dancer mentoring"></div>
+    <div><label>Position <span class="muted" id="cPos">0/50</span></label><input type="text" id="voPos" maxlength="50" placeholder="e.g. Student volunteer"></div>
+    <div><label>Type</label><select id="voCat"><option>Volunteer</option><option>Leadership</option><option>Club / Team</option><option>Arts</option><option>Work</option><option>Other</option></select></div>
+    <div><label>Start date</label><input type="month" id="voStart"></div>
+    <div><label>End date</label><input type="month" id="voEnd"></div>
+    <div style="display:flex;align-items:end"><label style="display:flex;gap:6px;align-items:center;font-size:.9rem;color:var(--text)"><input type="checkbox" id="voOn" checked style="width:18px;height:18px"> Still ongoing</label></div>
+    <div><label>Hours</label><div style="display:flex;gap:6px"><input type="number" id="voHrs" min="0" step="0.5" placeholder="3"><select id="voPer"><option>per week</option><option selected>per month</option><option>per year</option><option>one time</option></select></div></div>
+    <div><label>Total hours so far (optional)</label><input type="number" id="voTot" min="0" step="0.5"></div>
+    <div><label>Grades</label><div class="gr"><label><input type="checkbox" class="voG" value="9">9</label><label><input type="checkbox" class="voG" value="10">10</label><label><input type="checkbox" class="voG" value="11" checked>11</label><label><input type="checkbox" class="voG" value="12">12</label></div></div>
+    <div class="vf2"><label>Responsibilities</label><textarea id="voResp" rows="2" placeholder="e.g. Teaching basic movements"></textarea></div>
+    <div class="vf2"><label>Impact (numbers help!)</label><textarea id="voImp" rows="2" placeholder="e.g. Mentored 12 younger students"></textarea></div>
+    <div><label>Supervisor name and role</label><input type="text" id="voSup" placeholder="e.g. Ms. Rao, dance instructor"></div>
+    <div><label>Supervisor email / phone</label><input type="text" id="voCon"></div>
+    <div class="vf2"><label>Short description of what she accomplished <span class="muted" id="cDesc">0/150</span></label><textarea id="voDesc" rows="2" maxlength="150" placeholder="Common App allows 150 characters. Start with an action verb."></textarea></div>
+    <div class="vf2"><label>Link to the Google Drive folder with proof (optional)</label><input type="text" id="voFold" placeholder="https://drive.google.com/drive/folders/…"></div>
+    <div class="vf2"><label>Records saved so far</label><div class="gr" style="flex-wrap:wrap"><label><input type="checkbox" class="voD" value="Confirmation emails">Confirmation emails</label><label><input type="checkbox" class="voD" value="Certificates">Certificates</label><label><input type="checkbox" class="voD" value="Photos">Photos</label><label><input type="checkbox" class="voD" value="Event programs">Event programs</label><label><input type="checkbox" class="voD" value="Supervisor contact">Supervisor contact</label></div></div>
+    <div class="vf2"><label>Other notes</label><input type="text" id="voNote"></div>
+  </div>
+  <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button id="voAdd">Save and send to Google Sheet</button><button class="ghost" onclick="voClear()">Clear form</button></div>
+</div>
+
+<div class="card">
+  <div class="top"><h2 style="margin:0">📒 My activities</h2><div><button class="ghost" onclick="voSendAll()">Resend unsent</button> <button class="ghost" onclick="voCsv()">Download CSV</button> <a class="btnlink" id="voOpen" href="#" target="_blank" rel="noopener" style="display:none">Open Google Sheet →</a></div></div>
+  <div class="stats" style="margin:10px 0">
+    <div class="stat"><b id="voN">0</b>activities</div>
+    <div class="stat"><b id="voSlots">10</b>Common App slots left</div>
+    <div class="stat"><b id="voHT">0</b>total hours logged</div>
+  </div>
+  <div id="voList"></div>
+</div>
+
+<div class="card"><h2>📁 Records to keep (in Google Drive)</h2>
+  <p class="muted">Make a Drive folder called "Volunteer Records". Inside it, one folder per organization, each with these items:</p>
+  <ul><li>✉️ <b>Volunteer confirmation emails</b> (screenshot or forward to yourself)</li><li>🏅 <b>Certificates</b></li><li>📷 <b>Photos of activities</b></li><li>📄 <b>Event programs</b></li><li>📇 <b>Supervisor contact information</b> (name, role, email, phone)</li><li>📝 <b>A short description</b> of what she accomplished, written soon after each event</li></ul>
+  <p class="muted">Paste the folder's link into each activity above so everything stays connected.</p>
+</div>
+
+<div class="card hl"><h2>🎓 Common App activities tips</h2>
+<ul>
+<li>She can list up to <b>10 activities</b>. Quality matters more than quantity.</li>
+<li>Limits (please verify on commonapp.org): position or leadership description 50 characters, organization name 100 characters, activity description 150 characters. The counters above help with this.</li>
+<li>List the most important activity first. Show growth over time and real responsibility.</li>
+<li>Use numbers: students taught, hours given, events organized, money raised.</li>
+<li>Look for ways to deepen one or two activities, like mentoring others or starting a small project, instead of joining many.</li>
+</ul></div>
+</section>
 <section class="pane" id="p-res">
 <h2 style="font-size:1.3rem;margin:0 0 6px">🔗 Resources</h2>
 <p class="muted">All links open in a new tab. Official College Board and Khan Academy tools are free.</p>
@@ -657,7 +764,7 @@ render();
     window.scrollTo(0,0);
   }
   document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener('click',function(){show(b.dataset.t)})});
-  var T=['track','school','hard','plan','essay','res'];var h=location.hash.slice(1);show(T.indexOf(h)>=0?h:'track');
+  var T=['track','school','hard','plan','essay','vol','res'];var h=location.hash.slice(1);show(T.indexOf(h)>=0?h:'track');
   window.addEventListener('hashchange',function(){var x=location.hash.slice(1);if(T.indexOf(x)>=0)show(x)});
 })();
 
@@ -816,4 +923,66 @@ render();
   render();
 })();
 
+
+(function(){
+  var VK='sat-volunteer-v1',V=null;
+  try{V=JSON.parse(localStorage.getItem(VK))}catch(e){}
+  if(!V||!V.entries)V={url:'',key:'',sheet:'',entries:[],nid:1};
+  function g(i){return document.getElementById(i)}
+  function sv(){try{localStorage.setItem(VK,JSON.stringify(V))}catch(e){}}
+  function ml(v){if(!v)return'';var p=v.split('-');return new Date(+p[0],+p[1]-1,1).toLocaleDateString('en-US',{month:'long',year:'numeric'})}
+  function counter(i,c,m){var el=g(i),o=g(c);el.addEventListener('input',function(){o.textContent=el.value.length+'/'+m});}
+  counter('voOrg','cOrg',100);counter('voPos','cPos',50);counter('voDesc','cDesc',150);
+  g('voUrl').value=V.url;g('voKey').value=V.key;g('voSheet').value=V.sheet;
+  g('voOn').addEventListener('change',function(){g('voEnd').disabled=this.checked});g('voEnd').disabled=true;
+  window.voSaveCfg=function(){V.url=g('voUrl').value.trim();V.key=g('voKey').value.trim();V.sheet=g('voSheet').value.trim();sv();
+    g('voCfgMsg').textContent=(V.url&&V.key)?'Saved. New entries will be sent to your Google Sheet.':'Saved. Add the web app URL and secret word to turn on sending.';render()};
+  window.voCopy=function(){var t=g('voCode').textContent;
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('Code copied')},function(){sel()})}else sel();
+    function sel(){var r=document.createRange();r.selectNodeContents(g('voCode'));var s=window.getSelection();s.removeAllRanges();s.addRange(r);toast('Select and copy the code (Ctrl+C)')}};
+  function payload(e){return {key:V.key,org:e.org,activity:e.act,position:e.pos,category:e.cat,start:e.start,end:e.end,hours:e.hours,total:e.tot,grades:e.grades,resp:e.resp,impact:e.imp,sup:e.sup,contact:e.con,desc:e.desc,docs:e.docs,folder:e.fold,notes:e.note}}
+  function send(e){
+    if(!V.url||!V.key){return Promise.reject(new Error('not configured'))}
+    return fetch(V.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload(e))}).then(function(){e.sent=new Date().toISOString();sv()});
+  }
+  window.voAddSend=function(){};
+  g('voAdd').addEventListener('click',function(){
+    var org=g('voOrg').value.trim(),act=g('voAct').value.trim();
+    if(!org||!act){toast('Please enter the organization and activity');return}
+    var hrs=g('voHrs').value,per=g('voPer').value;
+    var e={id:V.nid++,org:org,act:act,pos:g('voPos').value.trim(),cat:g('voCat').value,
+      start:ml(g('voStart').value),end:g('voOn').checked?'Ongoing':ml(g('voEnd').value),
+      hours:hrs?(per==='one time'?hrs+' hours (one time)':hrs+' hours '+per.replace('per ','/')):'',
+      tot:g('voTot').value,grades:[].map.call(document.querySelectorAll('.voG:checked'),function(x){return x.value}).join(', '),
+      resp:g('voResp').value.trim(),imp:g('voImp').value.trim(),sup:g('voSup').value.trim(),con:g('voCon').value.trim(),
+      desc:g('voDesc').value.trim(),fold:g('voFold').value.trim(),
+      docs:[].map.call(document.querySelectorAll('.voD:checked'),function(x){return x.value}).join(', '),note:g('voNote').value.trim(),sent:''};
+    V.entries.push(e);sv();render();
+    send(e).then(function(){render();toast('✅ Saved and sent to your Google Sheet')}).catch(function(){render();toast(V.url?'Saved here, but sending failed. Use "Resend unsent" later.':'Saved here. Finish the setup to send to Google Sheets.')});
+    voClear();
+  });
+  window.voClear=function(){['voOrg','voAct','voPos','voStart','voEnd','voHrs','voTot','voResp','voImp','voSup','voCon','voDesc','voFold','voNote'].forEach(function(i){g(i).value=''});
+    document.querySelectorAll('.voD').forEach(function(x){x.checked=false});['cOrg','cPos','cDesc'].forEach(function(i){g(i).textContent=g(i).textContent.replace(/^\d+/,'0')})};
+  window.voSendAll=function(){var u=V.entries.filter(function(e){return !e.sent});
+    if(!u.length){toast('Everything has already been sent');return}
+    if(!V.url||!V.key){toast('Finish the one-time setup first');return}
+    u.reduce(function(p,e){return p.then(function(){return send(e)})},Promise.resolve()).then(function(){render();toast('✅ Sent '+u.length+' entr'+(u.length>1?'ies':'y'))}).catch(function(){render();toast('Sending failed. Check the web app URL.')})};
+  window.voDel=function(id){if(confirm('Delete this entry here? (It stays in your Google Sheet until you delete it there.)')){V.entries=V.entries.filter(function(e){return e.id!==id});sv();render()}};
+  window.voCsv=function(){var H=['Organization','Activity','Position','Type','Start date','End date','Hours','Total hours so far','Grades','Responsibilities','Impact','Supervisor','Supervisor contact','Short description','Documents saved','Drive folder link','Notes'];
+    function q(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'}
+    var rows=[H.map(q).join(',')].concat(V.entries.map(function(e){return [e.org,e.act,e.pos,e.cat,e.start,e.end,e.hours,e.tot,e.grades,e.resp,e.imp,e.sup,e.con,e.desc,e.docs,e.fold,e.note].map(q).join(',')}));
+    var b=new Blob(['\ufeff'+rows.join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='andrea-volunteer-record.csv';document.body.appendChild(a);a.click();a.remove()};
+  function render(){
+    var n=V.entries.length,h=V.entries.reduce(function(s,e){return s+(+e.tot||0)},0);
+    g('voN').textContent=n;g('voSlots').textContent=Math.max(0,10-n);g('voHT').textContent=h;
+    var o=g('voOpen');if(V.sheet){o.href=V.sheet;o.style.display='inline-block'}else o.style.display='none';
+    g('voList').innerHTML=n?V.entries.slice().reverse().map(function(e){
+      return '<div class="ve"><div class="top"><b>'+esc(e.org)+' · '+esc(e.act)+'</b><span><span class="st '+(e.sent?'ok':'no')+'">'+(e.sent?'✓ Sent to sheet':'Not sent yet')+'</span> <button class="x" onclick="voDel('+e.id+')">✕</button></span></div>'
+       +'<small>'+[e.cat,e.pos,(e.start?e.start+' – '+e.end:''),e.hours,e.tot?e.tot+' total hrs':'',e.grades?'Grades '+e.grades:''].filter(Boolean).map(esc).join(' · ')+'</small>'
+       +(e.desc?'<div style="margin-top:4px">'+esc(e.desc)+'</div>':'')
+       +(e.docs?'<div class="muted">📁 '+esc(e.docs)+'</div>':'')
+       +(e.fold?'<div><a href="'+esc(e.fold)+'" target="_blank" rel="noopener">Open Drive folder</a></div>':'')+'</div>'}).join(''):'<div class="muted">No activities yet. Add the first one above.</div>';
+  }
+  render();
+})();
 </script></body></html>
